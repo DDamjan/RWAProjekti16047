@@ -7,7 +7,8 @@
   "scripts": {
     "server": "webpack-dev-server --open",
     "build": "babel src -d lib",
-    "bundle": "npx webpack --config webpack.config.js"
+    "bundle": "npx webpack --config webpack.config.js",
+    "DataBase": "json-server --watch db.json"
   },
   "keywords": [],
   "author": "",

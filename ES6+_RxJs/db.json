@@ -1,0 +1,84 @@
+{
+  "eventCount": {
+    "count": 14
+  },
+  "swimmerCount": {
+    "count": 0
+  },
+  "records": [],
+  "events": [
+    {
+      "id": 1,
+      "title": "50m Freestyle",
+      "evID": "50Free"
+    },
+    {
+      "id": 2,
+      "title": "100m Freestyle",
+      "evID": "100Free"
+    },
+    {
+      "id": 3,
+      "title": "200m Freestyle",
+      "evID": "200Free"
+    },
+    {
+      "id": 4,
+      "title": "50m Backstroke",
+      "evID": "50Back"
+    },
+    {
+      "id": 5,
+      "title": "100m Backstroke",
+      "evID": "100Back"
+    },
+    {
+      "id": 6,
+      "title": "200m Backstroke",
+      "evID": "200Back"
+    },
+    {
+      "id": 7,
+      "title": "50m Butterfly",
+      "evID": "50Fly"
+    },
+    {
+      "id": 8,
+      "title": "100m Butterfly",
+      "evID": "100Fly"
+    },
+    {
+      "id": 9,
+      "title": "200m Butterfly",
+      "evID": "200Fly"
+    },
+    {
+      "id": 10,
+      "title": "50m Breaststroke",
+      "evID": "50Breast"
+    },
+    {
+      "id": 11,
+      "title": "100m Breaststroke",
+      "evID": "100Breast"
+    },
+    {
+      "id": 12,
+      "title": "200m Breaststroke",
+      "evID": "200Breast"
+    },
+    {
+      "id": 13,
+      "title": "200m Individual Medley",
+      "evID": "200IM"
+    },
+    {
+      "id": 14,
+      "title": "400m Individual Medley",
+      "evID": "400IM"
+    }
+  ],
+  "Swimmers": [
+
+  ]
+}

@@ -4,6 +4,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.drawForm = drawForm;
+
+var _rxjs = require("rxjs");
+
 function drawForm(host) {
     var formDiv = document.createElement("div");
     formDiv.className = "login-form";
@@ -13,13 +16,33 @@ function drawForm(host) {
     label.innerHTML = "Swimmer registration";
     host.appendChild(label);
 
-    drawContainer(formDiv, "First name", false);
-    drawContainer(formDiv, "Last name", false);
-    drawContainer(formDiv, "Club", false);
-    drawContainer(formDiv, "Select events(Use CTRL for multiple selection)", true);
+    drawContainer(formDiv, "First name", "first-name", "", false);
+    drawContainer(formDiv, "Last name", "last-name", "", false);
+    drawContainer(formDiv, "Club", "club", "", false);
+    drawContainer(formDiv, "Select event", "event-selection", "", true);
+    drawContainer(formDiv, "Event PB", "event-pb", "00:00:00 (min:sec:mili)", false);
+
+    var btn = document.createElement("button");
+    btn.innerHTML = "Add";
+    host.appendChild(btn);
+
+    btn.onclick = function (ev) {
+        var firstName = document.querySelector('input[name="first-name"]').value;
+        var lastName = document.querySelector('input[name="last-name"]').value;
+        var club = document.querySelector('input[name="club"]').value;
+        var event = document.querySelector('select[name="event-selection"]');
+        var selectedEvent = event.options[event.selectedIndex].value;
+        var eventPB = document.querySelector('input[name="event-pb"]').value;
+
+        if (firstName === "" || lastName === "" || club === "") {
+            alert("Please fill in all fields before submititng!");
+        } else {
+            sendSwimmerToDB(firstName, lastName, club, selectedEvent, eventPB);
+        }
+    };
 }
 
-function drawContainer(host, lblText, bool) {
+function drawContainer(host, lblText, name, desc, bool) {
     var container = document.createElement("div");
     container.className = "login-component";
     host.appendChild(container);
@@ -30,27 +53,21 @@ function drawContainer(host, lblText, bool) {
 
     if (!bool) {
         var tbx = document.createElement("input");
+        tbx.name = name;
+        tbx.placeholder = desc;
         container.appendChild(tbx);
     } else {
         var dropDown = document.createElement("select");
-        dropDown.name = "Category";
-        dropDown.multiple = true;
+        dropDown.name = name;
         container.appendChild(dropDown);
 
-        addEvent(dropDown, "50m Freestyle", "50free");
-        addEvent(dropDown, "100m Freesyle", "100free");
-        addEvent(dropDown, "200m Freesyle", "200free");
-        addEvent(dropDown, "50m Backstroke", "50back");
-        addEvent(dropDown, "100m Backstroke", "100back");
-        addEvent(dropDown, "200m Backstroke", "200back");
-        addEvent(dropDown, "50m Butterfly", "50fly");
-        addEvent(dropDown, "100m Butterfly", "100fly");
-        addEvent(dropDown, "200m Butterfly", "200fly");
-        addEvent(dropDown, "50m Breastsroke", "50breast");
-        addEvent(dropDown, "100m Breaststroke", "100breast");
-        addEvent(dropDown, "200m Breaststroke", "200breast");
-        addEvent(dropDown, "200m Individual Medley", "200IM");
-        addEvent(dropDown, "400m Individual Medley", "400IM");
+        returnFromDB("eventCount").subscribe(function (evCount) {
+            for (var i = 1; i <= evCount.count; i++) {
+                returnFromDB("events/" + i).subscribe(function (res) {
+                    addEvent(dropDown, res.title, res.evID);
+                });
+            }
+        });
     }
 }
 
@@ -59,4 +76,50 @@ function addEvent(host, event, evValue) {
     ddOption.innerHTML = event;
     ddOption.value = evValue;
     host.appendChild(ddOption);
+}
+
+function returnFromDB(table) {
+    return (0, _rxjs.from)(fetch("http://localhost:3000/" + table).then(function (res) {
+        return res.json();
+    }));
+}
+
+function sendSwimmerToDB(firstName_, lastName_, club_, event_, PB_) {
+
+    returnFromDB("swimmerCount").subscribe(function (res) {
+        var id_ = res.count + 1;
+        var data = {
+            id: id_,
+            firstName: firstName_,
+            lastName: lastName_,
+            club: club_,
+            event: event_,
+            PB: PB_
+        };
+        var options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+
+        var newCount = { count: id_ };
+        var countOpt = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newCount)
+        };
+        postToDB(countOpt, "swimmerCount");
+        postToDB(options, "swimmers");
+        console.log("Poslato");
+    });
+}
+
+function postToDB(options, table) {
+    return fetch("http://localhost:3000/" + table, options).then(function (response) {
+        return response.json;
+    });
 }
