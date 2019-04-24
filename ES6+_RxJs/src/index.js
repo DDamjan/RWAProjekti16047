@@ -1,3 +1,5 @@
-import { drawForm } from "./SwimmerRegistration";
+import {Registration} from "./SwimmerRegistration";
 
-drawForm(document.body);
+let registration = new Registration();
+
+registration.drawForm(document.body);
