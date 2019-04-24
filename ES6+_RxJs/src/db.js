@@ -7,13 +7,6 @@ export function returnFromDB(table) {
     )
 }
 
-export function sendSwimmerToDB(swimmerArray) {
-    swimmerArray.forEach(s => {
-        let body = s;
-        postToDB(body, "Swimmers");
-    });
-}
-
 export function postToDB(body, table) {
     let options = {
         method: 'POST',

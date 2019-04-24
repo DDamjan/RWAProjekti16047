@@ -1,6 +1,7 @@
 import { from } from "rxjs";
-import { returnFromDB, sendSwimmerToDB, postToDB } from "./db.js"
+import { returnFromDB, postToDB } from "./db.js"
 import { swimmer } from "./Swimmer.js";
+import { getRandomNumbers } from "./logic.js";
 
 export class Registration {
 
@@ -89,9 +90,9 @@ export class Registration {
                 returnFromDB("swimmerCount")
                     .subscribe(res => {
                         let id = res.count + 1;
-                        let s = new swimmer(id, firstName, lastName, club, selectedEvent, eventPB);
+                        let exp = parseInt(Math.random()*100);
+                        let s = new swimmer(id, firstName, lastName, club, selectedEvent, eventPB, exp);
                         this.swimmers.push(s);
-                        
                         let sCount = {count:id};
                         postToDB(sCount, "swimmerCount");
                     });
@@ -103,7 +104,7 @@ export class Registration {
         container.appendChild(btnSubmit);
 
         btnSubmit.onclick = (ev) => {
-            postToDB(this.swimmers, "Swimmers");
+            postToDB(this.swimmers, "swimmers");
         }
     }
 }

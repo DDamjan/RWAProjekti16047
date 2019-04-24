@@ -2,4 +2,6 @@
 
 var _SwimmerRegistration = require("./SwimmerRegistration");
 
-(0, _SwimmerRegistration.drawForm)(document.body);
+var registration = new _SwimmerRegistration.Registration();
+
+registration.drawForm(document.body);

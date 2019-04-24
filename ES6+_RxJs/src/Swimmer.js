@@ -1,5 +1,5 @@
 export class swimmer{
-    constructor(id, firstName, lastName, club, event, pb){
+    constructor(id, firstName, lastName, club, event, pb, exp){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -10,6 +10,6 @@ export class swimmer{
         this.lane = 0;
         this.place = 0;
         this.time = 0;
-        this.exp = 0; //odredjuje sansu za diskvalifikaciju. Veci broj -> manja sansa.
+        this.exp = exp; //odredjuje sansu za diskvalifikaciju. Veci broj -> manja sansa.
     }
 }

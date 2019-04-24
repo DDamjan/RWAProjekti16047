@@ -3,123 +3,128 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.drawForm = drawForm;
+exports.Registration = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _rxjs = require("rxjs");
 
-function drawForm(host) {
-    var formDiv = document.createElement("div");
-    formDiv.className = "login-form";
-    host.appendChild(formDiv);
+var _db = require("./db.js");
 
-    var label = document.createElement("label");
-    label.innerHTML = "Swimmer registration";
-    host.appendChild(label);
+var _Swimmer = require("./Swimmer.js");
 
-    drawContainer(formDiv, "First name", "first-name", "", false);
-    drawContainer(formDiv, "Last name", "last-name", "", false);
-    drawContainer(formDiv, "Club", "club", "", false);
-    drawContainer(formDiv, "Select event", "event-selection", "", true);
-    drawContainer(formDiv, "Event PB", "event-pb", "00:00:00 (min:sec:mili)", false);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    var btn = document.createElement("button");
-    btn.innerHTML = "Add";
-    host.appendChild(btn);
+var Registration = exports.Registration = function () {
+    function Registration() {
+        _classCallCheck(this, Registration);
 
-    btn.onclick = function (ev) {
-        var firstName = document.querySelector('input[name="first-name"]').value;
-        var lastName = document.querySelector('input[name="last-name"]').value;
-        var club = document.querySelector('input[name="club"]').value;
-        var event = document.querySelector('select[name="event-selection"]');
-        var selectedEvent = event.options[event.selectedIndex].value;
-        var eventPB = document.querySelector('input[name="event-pb"]').value;
+        this.swimmers = new Array();
+    }
 
-        if (firstName === "" || lastName === "" || club === "") {
-            alert("Please fill in all fields before submititng!");
-        } else {
-            sendSwimmerToDB(firstName, lastName, club, selectedEvent, eventPB);
+    _createClass(Registration, [{
+        key: "drawForm",
+        value: function drawForm(host) {
+            var formDiv = document.createElement("div");
+            formDiv.className = "login-form";
+            host.appendChild(formDiv);
+
+            var label = document.createElement("label");
+            label.innerHTML = "Swimmer registration";
+            host.appendChild(label);
+
+            this.drawContainer(formDiv, "First name", "first-name", "", false);
+            this.drawContainer(formDiv, "Last name", "last-name", "", false);
+            this.drawContainer(formDiv, "Club", "club", "", false);
+            this.drawContainer(formDiv, "Select event", "event-selection", "", true);
+            this.drawContainer(formDiv, "Event PB", "event-pb", "00:00:00 (min:sec:mili)", false);
+
+            this.drawButtons(host);
         }
-    };
-}
+    }, {
+        key: "drawContainer",
+        value: function drawContainer(host, lblText, name, desc, bool) {
+            var _this = this;
 
-function drawContainer(host, lblText, name, desc, bool) {
-    var container = document.createElement("div");
-    container.className = "login-component";
-    host.appendChild(container);
+            var container = document.createElement("div");
+            container.className = "login-component";
+            host.appendChild(container);
 
-    var label = document.createElement("label");
-    label.innerHTML = lblText;
-    container.appendChild(label);
+            var label = document.createElement("label");
+            label.innerHTML = lblText;
+            container.appendChild(label);
 
-    if (!bool) {
-        var tbx = document.createElement("input");
-        tbx.name = name;
-        tbx.placeholder = desc;
-        container.appendChild(tbx);
-    } else {
-        var dropDown = document.createElement("select");
-        dropDown.name = name;
-        container.appendChild(dropDown);
+            if (!bool) {
+                var tbx = document.createElement("input");
+                tbx.name = name;
+                tbx.placeholder = desc;
+                container.appendChild(tbx);
+            } else {
+                var dropDown = document.createElement("select");
+                dropDown.name = name;
+                container.appendChild(dropDown);
 
-        returnFromDB("eventCount").subscribe(function (evCount) {
-            for (var i = 1; i <= evCount.count; i++) {
-                returnFromDB("events/" + i).subscribe(function (res) {
-                    addEvent(dropDown, res.title, res.evID);
+                (0, _db.returnFromDB)("eventCount").subscribe(function (evCount) {
+                    for (var i = 1; i <= evCount.count; i++) {
+                        (0, _db.returnFromDB)("events/" + i).subscribe(function (res) {
+                            _this.addEvent(dropDown, res.title, res.evID);
+                        });
+                    }
                 });
             }
-        });
-    }
-}
+        }
+    }, {
+        key: "addEvent",
+        value: function addEvent(host, event, evValue) {
+            var ddOption = document.createElement("option");
+            ddOption.innerHTML = event;
+            ddOption.value = evValue;
+            host.appendChild(ddOption);
+        }
+    }, {
+        key: "drawButtons",
+        value: function drawButtons(host) {
+            var _this2 = this;
 
-function addEvent(host, event, evValue) {
-    var ddOption = document.createElement("option");
-    ddOption.innerHTML = event;
-    ddOption.value = evValue;
-    host.appendChild(ddOption);
-}
+            var container = document.createElement("div");
+            container.className = "login-component";
+            host.appendChild(container);
 
-function returnFromDB(table) {
-    return (0, _rxjs.from)(fetch("http://localhost:3000/" + table).then(function (res) {
-        return res.json();
-    }));
-}
+            var btnAdd = document.createElement("button");
+            btnAdd.innerHTML = "Add";
+            container.appendChild(btnAdd);
 
-function sendSwimmerToDB(firstName_, lastName_, club_, event_, PB_) {
+            btnAdd.onclick = function (ev) {
+                var firstName = document.querySelector('input[name="first-name"]').value;
+                var lastName = document.querySelector('input[name="last-name"]').value;
+                var club = document.querySelector('input[name="club"]').value;
+                var event = document.querySelector('select[name="event-selection"]');
+                var selectedEvent = event.options[event.selectedIndex].value;
+                var eventPB = document.querySelector('input[name="event-pb"]').value;
 
-    returnFromDB("swimmerCount").subscribe(function (res) {
-        var id_ = res.count + 1;
-        var data = {
-            id: id_,
-            firstName: firstName_,
-            lastName: lastName_,
-            club: club_,
-            event: event_,
-            PB: PB_
-        };
-        var options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
+                if (firstName === "" || lastName === "" || club === "") {
+                    alert("Please fill in all fields before submititng!");
+                } else {
+                    (0, _db.returnFromDB)("swimmerCount").subscribe(function (res) {
+                        var id = res.count + 1;
+                        var s = new _Swimmer.swimmer(id, firstName, lastName, club, selectedEvent, eventPB);
+                        _this2.swimmers.push(s);
 
-        var newCount = { count: id_ };
-        var countOpt = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newCount)
-        };
-        postToDB(countOpt, "swimmerCount");
-        postToDB(options, "swimmers");
-        console.log("Poslato");
-    });
-}
+                        var sCount = { count: id };
+                        (0, _db.postToDB)(sCount, "swimmerCount");
+                    });
+                }
+            };
 
-function postToDB(options, table) {
-    return fetch("http://localhost:3000/" + table, options).then(function (response) {
-        return response.json;
-    });
-}
+            var btnSubmit = document.createElement("button");
+            btnSubmit.innerHTML = "Submit";
+            container.appendChild(btnSubmit);
+
+            btnSubmit.onclick = function (ev) {
+                (0, _db.postToDB)(_this2.swimmers, "Swimmers");
+            };
+        }
+    }]);
+
+    return Registration;
+}();
