@@ -1,8 +1,5 @@
 import {Registration} from "./SwimmerRegistration";
 import { getRandomNumbers } from "./logic";
+import { drawWelcome } from "./welcome";
 
-let registration = new Registration();
-
-registration.drawForm(document.body);
-
-getRandomNumbers().subscribe(x=> console.log(x));
+drawWelcome(document.body);

@@ -1,0 +1,99 @@
+.welcome-div{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 300px;
+    margin: auto;
+    position: absolute;
+    top:0px; bottom:0px; left:0px; right:0px;
+}
+
+.Welcome-title, .registration-label{
+    text-align: center;
+    color: white;
+    font-size: 60pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.subtitle, .credits{
+    text-align: center;
+    color: white;
+    font-size: 15pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 2%;
+}
+
+.register-button{
+    margin: auto;
+    height: 60px;
+    width: 150px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 3px solid white;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    border-radius: 7%;
+
+}
+
+.register-button:hover{
+    background-color: rgba(255, 255, 255, 1);
+    color: #222;
+    cursor: pointer;
+}
+
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 40%;
+    height: 40%;
+    position: absolute;
+    top:0px; bottom:0px; left:0px; right:0px;
+}
+
+.register-component{
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.register-input{
+    width: 50%;
+    margin: auto;
+    border-radius: 7%;
+}
+
+.reg-component-label{
+    text-align: center;
+    color: white;
+    font-size: 11pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 2%;
+}
+
+.register-buttons{
+    display: flex;
+    flex-direction: row;
+    margin: 2% auto;
+    top:0px; bottom:0px; left:0px; right:0px;
+}
+
+.btn-add, .btn-submit{
+    margin: auto 2%;
+    height: 60px;
+    width: 150px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 3px solid white;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    border-radius: 7%;
+}
+
+.btn-add:hover, .btn-submit:hover{
+    background-color: rgba(255, 255, 255, 1);
+    color: #222;
+    cursor: pointer;
+}
