@@ -59,7 +59,7 @@
     text-align: center;
 }
 
-.register-input{
+.register-input, .register-input-pb{
     width: 50%;
     margin: auto;
     border-radius: 7%;

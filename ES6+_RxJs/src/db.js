@@ -1,6 +1,6 @@
 import { from } from "rxjs";
 
-export function returnFromDB(table) {
+export function getFromDB(table) {
     return from(
         fetch("http://localhost:3000/" + table)
             .then(res => res.json())

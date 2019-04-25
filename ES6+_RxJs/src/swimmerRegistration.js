@@ -1,7 +1,8 @@
-import { from } from "rxjs";
-import { returnFromDB, postToDB } from "./db.js"
-import { swimmer } from "./Swimmer.js";
-import { getRandomNumbers } from "./logic.js";
+import { getFromDB, postToDB } from "./db"
+import { swimmer } from "./Swimmer";
+import { reformatTime } from "./functions";
+import { competition } from "./competition";
+
 
 export class Registration {
 
@@ -25,6 +26,12 @@ export class Registration {
         this.drawContainer(formDiv, "Select event", "event-selection", "", true);
         this.drawContainer(formDiv, "Event PB", "event-pb", "00:00:00 (min:sec:mili)", false);
 
+        let Cleave = require('cleave.js');
+        let c = new Cleave('.register-input-pb', {
+            time: true,
+            timePattern: ['h', 'm', 's']
+        });
+
         this.drawButtons(formDiv);
     }
 
@@ -39,11 +46,21 @@ export class Registration {
         container.appendChild(label);
 
         if (!bool) {
-            const tbx = document.createElement("input");
-            tbx.name = name;
-            tbx.className = "register-input";
-            tbx.placeholder = desc;
-            container.appendChild(tbx);
+            if (name != "event-pb") {
+                const tbx = document.createElement("input");
+                tbx.name = name;
+                tbx.className = "register-input";
+                tbx.placeholder = desc;
+                container.appendChild(tbx);
+            }
+            else {
+                const tbx = document.createElement("input");
+                tbx.name = name;
+                tbx.className = "register-input-pb";
+                tbx.placeholder = desc;
+                container.appendChild(tbx);
+            }
+
         }
         else {
             const dropDown = document.createElement("select");
@@ -52,14 +69,15 @@ export class Registration {
             container.appendChild(dropDown);
 
 
-            returnFromDB("eventCount").subscribe(evCount => {
-                for (let i = 1; i <= evCount.count; i++) {
-                    returnFromDB(`events/${i}`)
-                        .subscribe(res => {
-                            this.addEvent(dropDown, res.title, res.evID);
-                        })
-                }
-            });
+            getFromDB("eventCount")
+                .subscribe(evCount => {
+                    for (let i = 1; i <= evCount.count; i++) {
+                        getFromDB(`events/${i}`)
+                            .subscribe(res => {
+                                this.addEvent(dropDown, res.title, res.evID);
+                            })
+                    }
+                });
         }
     }
 
@@ -92,11 +110,13 @@ export class Registration {
                 alert("Please fill in all fields before adding!");
             }
             else {
-                returnFromDB("swimmerCount")
+                getFromDB("swimmerCount")
                     .subscribe(res => {
                         let id = res.count + 1;
                         let exp = parseInt(Math.random() * 100);
-                        let s = new swimmer(id, firstName.value, lastName.value, club.value, selectedEvent.value, eventPB.value, exp);
+
+                        let pb = reformatTime(eventPB.value);
+                        let s = new swimmer(id, firstName.value, lastName.value, club.value, selectedEvent.value, pb, exp);
                         this.swimmers.push(s);
                         let sCount = { count: id };
                         postToDB(sCount, "swimmerCount");
@@ -114,15 +134,19 @@ export class Registration {
         container.appendChild(btnSubmit);
 
         btnSubmit.onclick = (ev) => {
-            returnFromDB("swimmerCount")
+            getFromDB("swimmerCount")
                 .subscribe(res => {
                     if (res.count != 0) {
-                        postToDB(this.swimmers, "swimmers");
+                        if (this.swimmers.count != 0) {
+                            postToDB(this.swimmers, "Swimmers");
+                        }
+
                         document.body.innerHTML = "";
-                        
+
+                        //let c = new competition();
                     }
-                    else{
-                        alert("No swimmers registered! Please register at least one swimmer.");
+                    else {
+                        alert("No swimmers registered! At least one swimmer needs to be registered!");
                     }
 
                 })

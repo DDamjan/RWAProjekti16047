@@ -3,7 +3,7 @@
     "count": 14
   },
   "swimmerCount": {
-    "count": 1
+    "count": 0
   },
   "records": [],
   "events": [
@@ -78,19 +78,5 @@
       "evID": "400IM"
     }
   ],
-  "Swimmers": [
-    {
-      "id": 1,
-      "firstName": "dasfda",
-      "lastName": "fsddfa",
-      "club": "gsfsdf",
-      "event": "50Free",
-      "pb": "123456",
-      "heat": 0,
-      "lane": 0,
-      "place": 0,
-      "time": 0,
-      "exp": 20
-    }
-  ]
+  "Swimmers": {}
 }
