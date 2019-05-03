@@ -3,23 +3,16 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.returnFromDB = returnFromDB;
-exports.sendSwimmerToDB = sendSwimmerToDB;
+exports.getFromDB = getFromDB;
 exports.postToDB = postToDB;
+exports.populateSwimmers = populateSwimmers;
 
 var _rxjs = require("rxjs");
 
-function returnFromDB(table) {
+function getFromDB(table) {
     return (0, _rxjs.from)(fetch("http://localhost:3000/" + table).then(function (res) {
         return res.json();
     }));
-}
-
-function sendSwimmerToDB(swimmerArray) {
-    swimmerArray.forEach(function (s) {
-        var body = s;
-        postToDB(body, "Swimmers");
-    });
 }
 
 function postToDB(body, table) {
@@ -33,5 +26,18 @@ function postToDB(body, table) {
 
     return fetch("http://localhost:3000/" + table, options).then(function (response) {
         return response.json;
+    });
+}
+
+function populateSwimmers(swimmers) {
+    getFromDB("Swimmers").subscribe(function (res) {
+        if (res.count != 0) {
+            getFromDB("swimmerCount").subscribe(function (count) {
+                for (var i = 0; i < count.count; i++) {
+                    var s = res[i];
+                    swimmers.push(s);
+                }
+            });
+        }
     });
 }

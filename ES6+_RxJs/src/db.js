@@ -19,3 +19,18 @@ export function postToDB(body, table) {
     return fetch("http://localhost:3000/" + table, options)
         .then((response) => response.json)
 }
+
+export function populateSwimmers(swimmers) {
+    getFromDB("Swimmers")
+        .subscribe(res => {
+            if (res.count != 0) {
+                getFromDB("swimmerCount")
+                    .subscribe(count => {
+                        for (let i = 0; i < count.count; i++) {
+                            let s = res[i];
+                            swimmers.push(s);
+                        }
+                    })
+            }
+        });
+}

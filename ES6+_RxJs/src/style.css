@@ -1,3 +1,10 @@
+body{
+    background-image: url("../resources/welcome.jpg");
+    background-size: cover;
+    background-color: #0c0129;
+    background-blend-mode: soft-light;
+}
+
 .welcome-div{
     display: flex;
     flex-direction: column;
@@ -23,7 +30,7 @@
     margin-bottom: 2%;
 }
 
-.register-button{
+.register-button, .btn-competition{
     margin: auto;
     height: 60px;
     width: 150px;
@@ -36,12 +43,11 @@
 
 }
 
-.register-button:hover{
+.register-button:hover, .btn-welcome:hover{
     background-color: rgba(255, 255, 255, 1);
     color: #222;
     cursor: pointer;
 }
-
 
 .register-form {
     display: flex;
@@ -73,14 +79,14 @@
     margin-top: 2%;
 }
 
-.register-buttons{
+.register-buttons, .welcome-buttons{
     display: flex;
     flex-direction: row;
     margin: 2% auto;
     top:0px; bottom:0px; left:0px; right:0px;
 }
 
-.btn-add, .btn-submit{
+.btn-add, .btn-submit, .btn-welcome{
     margin: auto 2%;
     height: 60px;
     width: 150px;
@@ -92,8 +98,35 @@
     border-radius: 7%;
 }
 
-.btn-add:hover, .btn-submit:hover{
+.btn-add:hover, .btn-submit:hover, .btn-competition:hover{
     background-color: rgba(255, 255, 255, 1);
     color: #222;
     cursor: pointer;
+}
+
+.competition-heats{
+    display:flex;
+    flex-direction: row;
+}
+
+.pool-lanes{
+    display:flex;
+    flex-direction: row;
+    width: 682px;
+    height: 852px;
+    background-image: url("../resources/pool.jpg");
+    background-size: cover;
+    padding: 0 5px;
+}
+
+.pool-lane-number{
+    width: 682px;
+    height: 55px;
+    background-image: url("../resources/pool-frame.jpg");
+    /*background-size: cover;*/
+}
+
+.lane-container{
+    flex:1 1 auto;
+    margin: 0 5px;
 }

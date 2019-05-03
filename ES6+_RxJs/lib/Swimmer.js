@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var swimmer = exports.swimmer = function swimmer(id, firstName, lastName, club, event, pb) {
+var swimmer = exports.swimmer = function swimmer(id, firstName, lastName, club, event, pb, exp) {
     _classCallCheck(this, swimmer);
 
     this.id = id;
@@ -19,5 +19,5 @@ var swimmer = exports.swimmer = function swimmer(id, firstName, lastName, club, 
     this.lane = 0;
     this.place = 0;
     this.time = 0;
-    this.exp = 0; //odredjuje sansu za diskvalifikaciju. Veci broj -> manja sansa.
+    this.exp = exp; //odredjuje sansu za diskvalifikaciju. Veci broj -> manja sansa.
 };

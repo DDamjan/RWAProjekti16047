@@ -1,14 +1,10 @@
-import {Registration} from "./SwimmerRegistration";
+import { Registration } from "./SwimmerRegistration";
+import { competition } from "./competition";
+import { createDiv } from "./functions";
 
-export function drawWelcome(host){
-    host.style.backgroundImage = 'url("../resources/welcome.jpg")';
-    host.style.backgroundSize = "cover";
-    host.style.backgroundColor = "#0c0129";
-    host.style.backgroundBlendMode = "soft-light";
-
-    let container = document.createElement("div");
-    container.className = "welcome-div";
-    host.appendChild(container);
+export function drawWelcome(host) {
+    createDiv(host, "welcome-div");
+    let container = document.querySelector(".welcome-div");
 
     let span1 = document.createElement("span");
     span1.className = "Welcome-title";
@@ -25,14 +21,29 @@ export function drawWelcome(host){
     span3.innerHTML = "Created by Damjan Denic 16047 as a RWA class project.";
     container.appendChild(span3);
 
-    let btn = document.createElement("button");
-    btn.className = "register-button";
-    btn.innerHTML = "Register a team";
-    container.appendChild(btn);
+    createDiv(container, "welcome-buttons");
+    let btnContainer = document.querySelector(".welcome-buttons");
 
-    btn.onclick = (ev) => {
+    let btnRegister = document.createElement("button");
+    btnRegister.className = "btn-welcome";
+    btnRegister.innerHTML = "Register a team";
+    btnContainer.appendChild(btnRegister);
+
+    let btnSpectate = document.createElement("button");
+    btnSpectate.className = "btn-welcome";
+    btnSpectate.innerHTML = "Spectate meet";
+    btnContainer.appendChild(btnSpectate);
+
+    btnRegister.onclick = (ev) => {
         let registration = new Registration();
-        host.innerHTML ="";
+        host.innerHTML = "";
         registration.drawForm(host);
+    }
+
+    btnSpectate.onclick = (ev) => {
+        host.innerHTML = "";
+        let c = new competition();
+        c.drawCompetition(host);
+
     }
 }

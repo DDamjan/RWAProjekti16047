@@ -1,6 +1,6 @@
-import { getFromDB, postToDB } from "./db"
+import { getFromDB, postToDB, populateSwimmers } from "./db"
 import { swimmer } from "./Swimmer";
-import { reformatTime } from "./functions";
+import { reformatTime, createDiv } from "./functions";
 import { competition } from "./competition";
 
 
@@ -8,12 +8,13 @@ export class Registration {
 
     constructor() {
         this.swimmers = new Array();
+
+        populateSwimmers(this.swimmers);
     }
 
     drawForm(host) {
-        const formDiv = document.createElement("div");
-        formDiv.className = "register-form";
-        host.appendChild(formDiv);
+        createDiv(host, "register-form");
+        let formDiv = document.querySelector(".register-form");
 
         let label = document.createElement("label");
         label.className = "registration-label";
@@ -33,6 +34,21 @@ export class Registration {
         });
 
         this.drawButtons(formDiv);
+
+        createDiv(formDiv, "register-component");
+        let toCompetitionDiv = document.querySelectorAll('.register-component');
+
+        let btnCompetition = document.createElement("button");
+        btnCompetition.className = "btn-competition";
+        btnCompetition.innerHTML = "Proceed to competition";
+        toCompetitionDiv[5].appendChild(btnCompetition);
+
+        btnCompetition.onclick = (ev) => {
+            host.innerHTML = "";
+            let c = new competition();
+            c.log();
+            c.drawCompetition(host);
+        }
     }
 
     drawContainer(host, lblText, name, desc, bool) {
@@ -89,9 +105,8 @@ export class Registration {
     }
 
     drawButtons(host) {
-        const container = document.createElement("div");
-        container.className = "register-buttons";
-        host.appendChild(container);
+        createDiv(host, "register-buttons");
+        const container = document.querySelector(".register-buttons");
 
         const btnAdd = document.createElement("button");
         btnAdd.innerHTML = "Add";
@@ -136,14 +151,8 @@ export class Registration {
         btnSubmit.onclick = (ev) => {
             getFromDB("swimmerCount")
                 .subscribe(res => {
-                    if (res.count != 0) {
-                        if (this.swimmers.count != 0) {
-                            postToDB(this.swimmers, "Swimmers");
-                        }
-
-                        document.body.innerHTML = "";
-
-                        //let c = new competition();
+                    if (this.swimmers.length != 0) {
+                        postToDB(this.swimmers, "Swimmers");
                     }
                     else {
                         alert("No swimmers registered! At least one swimmer needs to be registered!");

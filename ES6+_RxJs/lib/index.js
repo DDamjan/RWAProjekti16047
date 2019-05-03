@@ -1,7 +1,5 @@
 "use strict";
 
-var _SwimmerRegistration = require("./SwimmerRegistration");
+var _welcome = require("./welcome");
 
-var registration = new _SwimmerRegistration.Registration();
-
-registration.drawForm(document.body);
+(0, _welcome.drawWelcome)(document.body);
