@@ -1,28 +1,31 @@
-body{
+body {
     background-image: url("../resources/welcome.jpg");
     background-size: cover;
     background-color: #0c0129;
     background-blend-mode: soft-light;
 }
 
-.welcome-div{
+.welcome-div {
     display: flex;
     flex-direction: column;
     width: 600px;
     height: 300px;
     margin: auto;
     position: absolute;
-    top:0px; bottom:0px; left:0px; right:0px;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
 }
 
-.Welcome-title, .registration-label{
+.Welcome-title, .registration-label {
     text-align: center;
     color: white;
     font-size: 60pt;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.subtitle, .credits{
+.subtitle, .credits {
     text-align: center;
     color: white;
     font-size: 15pt;
@@ -30,7 +33,7 @@ body{
     margin-bottom: 2%;
 }
 
-.register-button, .btn-competition{
+.register-button, .btn-competition {
     margin: auto;
     height: 60px;
     width: 150px;
@@ -40,10 +43,9 @@ body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
     border-radius: 7%;
-
 }
 
-.register-button:hover, .btn-welcome:hover{
+.register-button:hover, .btn-welcome:hover {
     background-color: rgba(255, 255, 255, 1);
     color: #222;
     cursor: pointer;
@@ -56,22 +58,25 @@ body{
     width: 40%;
     height: 40%;
     position: absolute;
-    top:0px; bottom:0px; left:0px; right:0px;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
 }
 
-.register-component{
-    display:flex;
+.register-component {
+    display: flex;
     flex-direction: column;
     text-align: center;
 }
 
-.register-input, .register-input-pb{
+.register-input, .register-input-pb {
     width: 50%;
     margin: auto;
     border-radius: 7%;
 }
 
-.reg-component-label{
+.reg-component-label {
     text-align: center;
     color: white;
     font-size: 11pt;
@@ -79,14 +84,17 @@ body{
     margin-top: 2%;
 }
 
-.register-buttons, .welcome-buttons{
+.register-buttons, .welcome-buttons {
     display: flex;
     flex-direction: row;
     margin: 2% auto;
-    top:0px; bottom:0px; left:0px; right:0px;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
 }
 
-.btn-add, .btn-submit, .btn-welcome{
+.btn-add, .btn-submit, .btn-welcome, .btn-start {
     margin: auto 2%;
     height: 60px;
     width: 150px;
@@ -98,19 +106,19 @@ body{
     border-radius: 7%;
 }
 
-.btn-add:hover, .btn-submit:hover, .btn-competition:hover{
+.btn-add:hover, .btn-submit:hover, .btn-competition:hover, .btn-start:hover {
     background-color: rgba(255, 255, 255, 1);
     color: #222;
     cursor: pointer;
 }
 
-.competition-heats{
-    display:flex;
+.competition-heats {
+    display: flex;
     flex-direction: row;
 }
 
-.pool-lanes{
-    display:flex;
+.pool-lanes {
+    display: flex;
     flex-direction: row;
     width: 682px;
     height: 852px;
@@ -119,14 +127,54 @@ body{
     padding: 0 5px;
 }
 
-.pool-lane-number{
-    width: 682px;
+.pool-lane-number {
+    width: 692px;
     height: 55px;
     background-image: url("../resources/pool-frame.jpg");
     /*background-size: cover;*/
 }
 
-.lane-container{
-    flex:1 1 auto;
+.lane-container {
+    display: flex;
+    flex: 1 1 auto;
     margin: 0 5px;
+    flex-direction: column-reverse;
+}
+
+.lane-line {
+    display: flex;
+    background-color: rgba(214, 17, 49, 0.5);
+}
+
+.swim-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.heat-tables {
+    display: flex;
+    flex-direction: row;
+    margin-left: 2%; 
+}
+
+table {
+    color: white;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+tr {
+    border: none;
+}
+
+td {
+    border-right: white solid 1px;
+    border-left: white solid 1px;
+}
+
+.stopwatch-label{
+    color: white;
+    font-size: 30pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
 }

@@ -46,7 +46,6 @@ export class Registration {
         btnCompetition.onclick = (ev) => {
             host.innerHTML = "";
             let c = new competition();
-            c.log();
             c.drawCompetition(host);
         }
     }
