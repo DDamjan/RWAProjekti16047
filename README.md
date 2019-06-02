@@ -8,3 +8,4 @@ Repozitorijum projekata predmeta Razvoj Web Aplikacija. Damjan Denic 16047
 	Osvajač medalje je plivač koji je isplivao najbrže vreme u okviru cele discipline, ne pojedinačne trke.
 	
 	
+2. Projekat (React/Rexu/Redux saga): Light verzija Deezer aplikacije. Login postojecih deezer korisnika, Stream muzike pomocu Deezer API servisa, prikaz favourite liste pesama, dodavanje novih pesama u favourite listu i uklanjanje postojecih pesama iz favourite liste. Mogucnost dodavanja i pregleda lyrics-a pesama.
