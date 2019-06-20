@@ -1,6 +1,6 @@
-import { getFromDB, postToDB, populateSwimmers } from "./db"
+import { getFromDB, postToDB, putToDB } from "./db"
 import { swimmer } from "./Swimmer";
-import { reformatTime, createDiv } from "./functions";
+import { reformatTime, createDiv, addEvent, randomDSQ } from "./functions";
 import { competition } from "./competition";
 
 
@@ -8,8 +8,11 @@ export class Registration {
 
     constructor() {
         this.swimmers = new Array();
-
-        populateSwimmers(this.swimmers);
+        this.time = 0;
+        this.count = 0;
+        getFromDB("SwimmerCount").subscribe(res => {
+            this.count = res.count;
+        })
     }
 
     drawForm(host) {
@@ -89,18 +92,11 @@ export class Registration {
                     for (let i = 1; i <= evCount.count; i++) {
                         getFromDB(`events/${i}`)
                             .subscribe(res => {
-                                this.addEvent(dropDown, res.title, res.evID);
+                                addEvent(dropDown, res.title, res.evID);
                             })
                     }
                 });
         }
-    }
-
-    addEvent(host, event, evValue) {
-        let ddOption = document.createElement("option");
-        ddOption.innerHTML = event;
-        ddOption.value = evValue;
-        host.appendChild(ddOption);
     }
 
     drawButtons(host) {
@@ -109,10 +105,10 @@ export class Registration {
 
         const btnAdd = document.createElement("button");
         btnAdd.innerHTML = "Add";
-        btnAdd.className = "btn-add";
+        btnAdd.className = "btn";
         container.appendChild(btnAdd);
 
-        btnAdd.onclick = (ev) => {
+        btnAdd.onclick =(ev) => {
             let firstName = document.querySelector('input[name="first-name"]');
             let lastName = document.querySelector('input[name="last-name"]');
             let club = document.querySelector('input[name="club"]');
@@ -124,16 +120,23 @@ export class Registration {
                 alert("Please fill in all fields before adding!");
             }
             else {
-                getFromDB("swimmerCount")
-                    .subscribe(res => {
-                        let id = res.count + 1;
-                        let exp = parseInt(Math.random() * 100);
+                let id = this.count + 1;
+                this.count++;
+                //Odredjuje sansu za diskvalifikaciju. Veci broj -> manja sansa.
+                let exp = parseInt(Math.random() * 150);
+                let pb = reformatTime(eventPB.value);
+                console.log(eventPB.value);
+                console.log(pb);
 
-                        let pb = reformatTime(eventPB.value);
-                        let s = new swimmer(id, firstName.value, lastName.value, club.value, selectedEvent.value, pb, exp);
+                /*Isplivano vreme je random vreme izmedju vremena 2 seknude brzeg od svetskog rekorda i vremena 5 sekundi sporijeg od najboljeg isplivanog vremena plivaca.
+                Izrazeno u milisekundama*/
+                getFromDB(`records?evID=${selectedEvent.value}`)
+                    .subscribe(record => {
+                        //Diskvalifikacija se u bazi pamti kao 0 a ispisuje se kao DSQ.
+                        let time = randomDSQ(parseInt(Math.random() * (pb + 5000 - (record[0].time - 2000)) + (record[0].time - 2000)), exp);
+                        console.log(`exp: ${exp}, time: ${time}`);
+                        let s = new swimmer(id, firstName.value, lastName.value, club.value, selectedEvent.value, pb, exp, time);
                         this.swimmers.push(s);
-                        let sCount = { count: id };
-                        postToDB(sCount, "swimmerCount");
                         firstName.value = "";
                         lastName.value = "";
                         club.value = "";
@@ -144,20 +147,18 @@ export class Registration {
 
         const btnSubmit = document.createElement("button");
         btnSubmit.innerHTML = "Submit";
-        btnSubmit.className = "btn-submit";
+        btnSubmit.className = "btn";
         container.appendChild(btnSubmit);
 
         btnSubmit.onclick = (ev) => {
-            getFromDB("swimmerCount")
-                .subscribe(res => {
-                    if (this.swimmers.length != 0) {
-                        postToDB(this.swimmers, "Swimmers");
-                    }
-                    else {
-                        alert("No swimmers registered! At least one swimmer needs to be registered!");
-                    }
-
-                })
+            if (this.swimmers.length != 0) {
+                postToDB(this.swimmers, "Swimmers");
+                let sCount = { count: this.count };
+                postToDB(sCount, "swimmerCount");
+            }
+            else {
+                alert("No swimmers registered! At least one swimmer needs to be registered!");
+            }
 
         }
     }

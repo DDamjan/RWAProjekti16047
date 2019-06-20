@@ -25,12 +25,12 @@ export function drawWelcome(host) {
     let btnContainer = document.querySelector(".welcome-buttons");
 
     let btnRegister = document.createElement("button");
-    btnRegister.className = "btn-welcome";
+    btnRegister.className = "btn";
     btnRegister.innerHTML = "Register a team";
     btnContainer.appendChild(btnRegister);
 
     let btnSpectate = document.createElement("button");
-    btnSpectate.className = "btn-welcome";
+    btnSpectate.className = "btn";
     btnSpectate.innerHTML = "Spectate meet";
     btnContainer.appendChild(btnSpectate);
 
@@ -44,6 +44,7 @@ export function drawWelcome(host) {
         host.innerHTML = "";
         let c = new competition();
         c.drawCompetition(host);
+
 
     }
 }

@@ -1,11 +1,77 @@
 {
   "eventCount": {
-    "count": 14
+    "count": 13
   },
   "swimmerCount": {
-    "count": 8
+    "count": 21
   },
-  "records": [],
+  "records": [
+    {
+      "id": 1,
+      "evID": "50Free",
+      "time": 2091
+    },
+    {
+      "id": 2,
+      "evID": "100Free",
+      "time": 4691
+    },
+    {
+      "id": 3,
+      "evID": "200Free",
+      "time": 10200
+    },
+    {
+      "id": 4,
+      "evID": "50Back",
+      "time": 2400
+    },
+    {
+      "id": 5,
+      "evID": "100Back",
+      "time": 5185
+    },
+    {
+      "id": 6,
+      "evID": "200Back",
+      "time": 11192
+    },
+    {
+      "id": 7,
+      "evID": "50Fly",
+      "time": 2227
+    },
+    {
+      "id": 8,
+      "evID": "100Fly",
+      "time": 4982
+    },
+    {
+      "id": 9,
+      "evID": "200Fly",
+      "time": 11151
+    },
+    {
+      "id": 10,
+      "evID": "50Breast",
+      "time": 2595
+    },
+    {
+      "id": 11,
+      "evID": "100Breast",
+      "time": 5710
+    },
+    {
+      "id": 12,
+      "evID": "200Breast",
+      "time": 12667
+    },
+    {
+      "id": 13,
+      "evID": "200IM",
+      "time": 11400
+    }
+  ],
   "events": [
     {
       "id": 1,
@@ -71,117 +137,296 @@
       "id": 13,
       "title": "200m Individual Medley",
       "evID": "200IM"
-    },
-    {
-      "id": 14,
-      "title": "400m Individual Medley",
-      "evID": "400IM"
     }
   ],
   "Swimmers": [
     {
       "id": 1,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Milorad",
+      "lastName": "Cavic",
+      "club": "Serbia",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
-      "lane": 0,
+      "pb": 2400,
+      "heat": 1,
+      "lane": 7,
       "place": 0,
       "time": 0,
-      "exp": 71
+      "exp": 67,
+      "rand": 707,
+      "changeDirection": false,
+      "half": false
     },
     {
       "id": 2,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Michael",
+      "lastName": "Phelps",
+      "club": "USA",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
-      "lane": 0,
+      "pb": 2411,
+      "heat": 2,
+      "lane": 4,
       "place": 0,
       "time": 0,
-      "exp": 62
+      "exp": 34,
+      "rand": 54,
+      "changeDirection": false,
+      "half": false
     },
     {
       "id": 3,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Nathan",
+      "lastName": "Adrian",
+      "club": "USA",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
-      "lane": 0,
+      "pb": 2200,
+      "heat": 1,
+      "lane": 6,
       "place": 0,
-      "time": 0,
-      "exp": 20
+      "time": 2529,
+      "exp": 90,
+      "rand": 942,
+      "changeDirection": false,
+      "half": false
     },
     {
       "id": 4,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Ivan",
+      "lastName": "Lendjer",
+      "club": "Serbia",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
-      "lane": 0,
+      "pb": 2500,
+      "heat": 2,
+      "lane": 2,
       "place": 0,
-      "time": 0,
-      "exp": 19
+      "time": 1990,
+      "exp": 113,
+      "rand": 446,
+      "changeDirection": false,
+      "half": false
     },
     {
       "id": 5,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Velimir",
+      "lastName": "Stjepanovic",
+      "club": "Serbia",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
-      "lane": 0,
+      "pb": 2000,
+      "heat": 1,
+      "lane": 3,
       "place": 0,
-      "time": 0,
-      "exp": 22
+      "time": 2095,
+      "exp": 100,
+      "rand": 221,
+      "changeDirection": false,
+      "half": false
     },
     {
       "id": 6,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Ian",
+      "lastName": "Thorpe",
+      "club": "Australia",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
-      "lane": 0,
+      "pb": 2000,
+      "heat": 1,
+      "lane": 4,
       "place": 0,
-      "time": 0,
-      "exp": 10
+      "time": 2211,
+      "exp": 129,
+      "rand": 878,
+      "changeDirection": false,
+      "half": false
     },
     {
       "id": 7,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Mark",
+      "lastName": "Spitz",
+      "club": "USA",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
+      "pb": 2222,
+      "heat": 1,
       "lane": 0,
       "place": 0,
-      "time": 0,
-      "exp": 17
+      "time": 2139,
+      "exp": 140,
+      "rand": 648,
+      "changeDirection": false,
+      "half": false
     },
     {
       "id": 8,
-      "firstName": "dasfda",
-      "lastName": "fdsgs",
-      "club": "gfds",
+      "firstName": "Ryan",
+      "lastName": "Lochte",
+      "club": "USA",
       "event": "50Free",
-      "pb": 671011,
-      "heat": 0,
-      "lane": 0,
+      "pb": 2106,
+      "heat": 1,
+      "lane": 5,
+      "place": 0,
+      "time": 2230,
+      "exp": 104,
+      "rand": 714,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 9,
+      "firstName": "Alexander",
+      "lastName": "Popov",
+      "club": "Russia",
+      "event": "50Free",
+      "pb": 2650,
+      "heat": 2,
+      "lane": 5,
+      "place": 0,
+      "time": 2853,
+      "exp": 32,
+      "rand": 518,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 10,
+      "firstName": "Caba",
+      "lastName": "Siladji",
+      "club": "Serbia",
+      "event": "50Free",
+      "pb": 2700,
+      "heat": 2,
+      "lane": 1,
       "place": 0,
       "time": 0,
-      "exp": 74
+      "exp": 53,
+      "rand": 87,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 11,
+      "firstName": "Aleksandar",
+      "lastName": "Jovanovic",
+      "club": "Serbia",
+      "event": "50Free",
+      "pb": 2000,
+      "heat": 1,
+      "lane": 2,
+      "place": 0,
+      "time": 2201,
+      "exp": 22,
+      "rand": 953,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 12,
+      "firstName": "Damjan",
+      "lastName": "Denic",
+      "club": "Serbia",
+      "event": "50Free",
+      "pb": 2800,
+      "heat": 2,
+      "lane": 6,
+      "place": 0,
+      "time": 1860,
+      "exp": 109,
+      "rand": 465,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 13,
+      "firstName": "Sun",
+      "lastName": "Yang",
+      "club": "China",
+      "event": "50Free",
+      "pb": 2407,
+      "heat": 2,
+      "lane": 3,
+      "place": 0,
+      "time": 2036,
+      "exp": 108,
+      "rand": 364,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 14,
+      "firstName": "Laszlo",
+      "lastName": "Cseh",
+      "club": "Hungary",
+      "event": "50Free",
+      "pb": 2121,
+      "heat": 1,
+      "lane": 1,
+      "place": 0,
+      "time": 2555,
+      "exp": 50,
+      "rand": 19,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 15,
+      "firstName": "Michael",
+      "lastName": "Phelps",
+      "club": "USA",
+      "event": "100Free",
+      "pb": 6000,
+      "heat": 1,
+      "lane": 4,
+      "place": 0,
+      "time": 0,
+      "exp": 49,
+      "rand": 73,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 16,
+      "firstName": "Milorad",
+      "lastName": "Cavic",
+      "club": "Serbia",
+      "event": "100Free",
+      "pb": 5954,
+      "heat": 1,
+      "lane": 3,
+      "place": 0,
+      "time": 6000,
+      "exp": 90,
+      "rand": 298,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 17,
+      "firstName": "Michael",
+      "lastName": "Phelps",
+      "club": "USA",
+      "event": "200Free",
+      "pb": 10506,
+      "heat": 1,
+      "lane": 3,
+      "place": 0,
+      "time": 0,
+      "exp": 27,
+      "rand": 448,
+      "changeDirection": false,
+      "half": false
+    },
+    {
+      "id": 18,
+      "firstName": "Milorad",
+      "lastName": "Cavic",
+      "club": "Serbia",
+      "event": "200Free",
+      "pb": 10709,
+      "heat": 1,
+      "lane": 4,
+      "place": 0,
+      "time": 10901,
+      "exp": 112,
+      "rand": 261,
+      "changeDirection": false,
+      "half": false
     }
   ]
 }

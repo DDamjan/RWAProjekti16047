@@ -94,7 +94,7 @@ body {
     right: 0px;
 }
 
-.btn-add, .btn-submit, .btn-welcome, .btn-start {
+.btn{
     margin: auto 2%;
     height: 60px;
     width: 150px;
@@ -106,10 +106,16 @@ body {
     border-radius: 7%;
 }
 
-.btn-add:hover, .btn-submit:hover, .btn-competition:hover, .btn-start:hover {
+.btn:hover {
     background-color: rgba(255, 255, 255, 1);
     color: #222;
     cursor: pointer;
+}
+
+.btn:disabled{
+    background-color: rgba(255, 255, 255, 1);
+    color: #222;
+    cursor: default;
 }
 
 .competition-heats {
@@ -138,7 +144,7 @@ body {
     display: flex;
     flex: 1 1 auto;
     margin: 0 5px;
-    flex-direction: column-reverse;
+    /*flex-direction: column-reverse;*/
 }
 
 .lane-line {
@@ -161,6 +167,7 @@ table {
     color: white;
     border-collapse: collapse;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 10px 10px 0px 10px;
 }
 
 tr {
@@ -177,4 +184,10 @@ td {
     font-size: 30pt;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
+    margin: auto;
+}
+
+.event-selector{
+    margin: auto;
+    border-radius: 7%;
 }

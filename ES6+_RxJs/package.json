@@ -25,6 +25,9 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "cleave.js": "^1.4.10",
-    "rxjs": "^6.4.0"
+    "detect-libc": "^1.0.3",
+    "fibers": "^4.0.1",
+    "rxjs": "^6.4.0",
+    "wait.for": "^0.6.6"
   }
 }
