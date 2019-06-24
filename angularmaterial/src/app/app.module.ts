@@ -14,13 +14,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { ActiveDriversComponent } from './components/active-drivers/active-drivers.component';
 import { DriverRegisterComponent } from './components/driver-register/driver-register.component';
 import { FindNearestComponent } from './components/find-nearest/find-nearest.component';
-
-const appRoutes: Routes = [
-  { path: 'view-map', component: MapViewComponent },
-  { path: '', component: ActiveDriversComponent },
-  { path: 'register', component: DriverRegisterComponent },
-  { path: 'find', component: FindNearestComponent }
-];
+import {StoreModule} from '@ngrx/store';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -48,7 +44,10 @@ const appRoutes: Routes = [
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    RouterModule.forRoot(appRoutes)
+    StoreDevtoolsModule,
+    FormsModule,
+    /*StoreModule.forRoot(''),*/
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

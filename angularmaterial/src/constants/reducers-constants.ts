@@ -1,0 +1,6 @@
+export const ADD_DRIVER = 'ADD_DRIVER';
+export const SELECT_DRIVER = 'SELECT_DRIVER';
+export const DELETE_DRIVER = 'DELETE_DRIVER';
+export const SELECT_ALL_DRIVERS = 'SELECT_ALL_DRIVERS';
+export const CHANGE_STATUS = 'CHANGE_STATUS';
+export const GIVE_ADRESS = 'GIVE_ADRESS';
