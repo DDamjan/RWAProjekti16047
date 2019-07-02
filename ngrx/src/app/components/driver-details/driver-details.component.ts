@@ -85,6 +85,10 @@ export class DriverDetailsComponent implements OnInit {
     this.mapView.showDetails(this.driver, this.currentRide);
     this.buttonEndDisabled = false;
     this.buttonCancelDisabled = true;
+    this.buttonArriveDisabled = true;
+    this.snackBar.open(`Driver has arrived`, 'Close', {
+      duration: 3000
+    });
   }
 
   endRide() {
@@ -96,11 +100,12 @@ export class DriverDetailsComponent implements OnInit {
     this.dataTable.onChange(this.currentRide);
     this.currentRide = null;
     this.mapView.showDetails(this.driver, this.currentRide);
+
+    this.buttonEndDisabled = true;
+
     this.snackBar.open(`Current ride has ended`, 'Close', {
       duration: 3000
     });
-
-
   }
 
   cancelRide() {
@@ -113,6 +118,10 @@ export class DriverDetailsComponent implements OnInit {
     this.dataTable.onChange(this.currentRide);
     this.currentRide = null;
     this.mapView.showDetails(this.driver, this.currentRide);
+
+    this.buttonCancelDisabled = true;
+    this.buttonArriveDisabled = true;
+
     this.snackBar.open(`Current ride has been canceled`, 'Close', {
       duration: 3000
     });
