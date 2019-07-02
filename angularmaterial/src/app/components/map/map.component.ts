@@ -1,8 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { APPID, APPCODE } from '../../../constants/map-credentials';
-import { toMMSS, toKM } from 'src/app/func/functions';
+import { toMMSS, toKM, createRide, fareDistance } from 'src/app/func/functions';
+import { Store } from '@ngrx/store';
+import { selectAllDrivers } from 'src/app/store/reducers/driver.reducer';
+import { taxiBlack, taxiWhite } from 'src/constants/svgs';
+import { Driver } from 'src/app/models/Driver';
+import * as driverActions from '../../store/actions';
+import { MatSnackBar } from '@angular/material';
+import { RideService } from 'src/app/service/ride.service';
+import { Ride } from 'src/app/models/Ride';
 declare var H: any;
-declare var bubble: any;
 
 @Component({
   selector: 'map-component',
@@ -13,7 +20,7 @@ declare var bubble: any;
 export class MapComponent implements OnInit {
   @ViewChild('map', null)
   public mapElement: ElementRef;
-
+  public drivers: Driver[] = [];
   public platform: any;
   public ui: any;
   public map: any;
@@ -26,6 +33,9 @@ export class MapComponent implements OnInit {
   public height: any;
 
   @Input()
+  public float: any;
+
+  @Input()
   public lat: number;
 
   @Input()
@@ -34,20 +44,27 @@ export class MapComponent implements OnInit {
   @Input()
   public zoom: number;
 
+  @Input()
+  public mode: string;
+
   @Output()
   routeParams = new EventEmitter<any>();
 
-  public constructor() { }
+  public constructor(public store: Store<any>, private snackBar: MatSnackBar, private rideService: RideService) { }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    this.store.select(selectAllDrivers).subscribe(drivers => {
+      drivers.forEach(d => this.drivers.push(d));
+    });
+  }
 
-  public ngAfterViewInit() {
-    this.platform = new H.service.Platform({
+  public async ngAfterViewInit() {
+    this.platform = await new H.service.Platform({
       app_id: APPID,
       app_code: APPCODE
     });
-    this.defaultLayers = this.platform.createDefaultLayers();
-    this.map = new H.Map(
+    this.defaultLayers = await this.platform.createDefaultLayers();
+    this.map = await new H.Map(
       this.mapElement.nativeElement,
       this.defaultLayers.normal.map,
       {
@@ -55,94 +72,194 @@ export class MapComponent implements OnInit {
         center: { lat: this.lat, lng: this.lng }
       }
     );
-    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
-    this.ui = H.ui.UI.createDefault(this.map, this.defaultLayers);
+    const behavior = await new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
+    this.ui = await H.ui.UI.createDefault(this.map, this.defaultLayers);
 
+    this.map.addEventListener('tap', (evt) => {
+      const bubble = new H.ui.InfoBubble(evt.target.getPosition(), {
+        content: evt.target.getData()
+      });
+      this.ui.addBubble(bubble);
+    }, false);
   }
 
-  public findAdress(adress: string) {
+  public findAdress(pickupAddress: string, destinationAddress: string) {
     const geocoder = this.platform.getGeocodingService();
     const geocodingParameters = {
-      searchText: adress,
+      searchText: pickupAddress,
       jsonattributes: 1
     };
-    let driver = {
-      lat: 43.313212,
-      lng: 21.933879
-    }
+
     geocoder.geocode(
-      geocodingParameters, (result) => { this.onSuccess(result, driver) }, (error) => { console.log(error); }
+      geocodingParameters, (result) => {
+        this.onSuccess(result, pickupAddress, destinationAddress);
+      }, (error) => { console.log(error); }
     );
   }
 
-  onSuccess(result, driver) {
-    const route = result.response.view[0].result;
-    this.addDriverToMap(driver);
-    this.addLocationsToMap(route);
-    this.calculateRouteFromAtoB(driver, route);
-  }
+  onSuccess(resultAddress, pickupAddressString: string, destinationAddressString: string) {
+    const pickupRoute = resultAddress.response.view[0].result;
+    const pickupCoord = {
+      lat: pickupRoute[0].location.displayPosition.latitude,
+      lng: pickupRoute[0].location.displayPosition.longitude
+    };
+    const nearestDriver = this.findNearestDriver(pickupCoord);
+    if (nearestDriver !== null) {
+      nearestDriver.isActive = true;
+      nearestDriver.pickupLat = pickupCoord.lat;
+      nearestDriver.pickupLng = pickupCoord.lng;
+      nearestDriver.pickupLocation = pickupAddressString;
+      this.addDriverToMap(nearestDriver);
+      this.addLocationToMap(pickupCoord, pickupAddressString);
+      const driverCoord = {
+        lat: nearestDriver.currentLat,
+        lng: nearestDriver.currentLng,
+        mode: 'driver'
+      };
+      this.calculateRouteFromAtoB(driverCoord, pickupCoord);
 
-  openBubble(position, text) {
-    if (!bubble) {
-      bubble = new H.ui.InfoBubble(
-        position,
-        { content: text });
-      this.ui.addBubble(bubble);
+      this.findDestination(nearestDriver, destinationAddressString);
+      this.store.dispatch(new driverActions.UpdateDriver(nearestDriver));
+      this.snackBar.open(`Driver assigned. Car no: ${nearestDriver.ID}`, 'Close', {
+        duration: 3000
+      });
     } else {
-      bubble.setPosition(position);
-      bubble.setContent(text);
-      bubble.open();
+      this.snackBar.open('No available drivers at the moment!', 'Close', {
+        duration: 3000
+      });
     }
   }
 
-  addLocationsToMap(locations) {
-    let location;
-    for (let i = 0; i < locations.length; i++) {
-      location = {
-        lat: locations[i].location.displayPosition.latitude,
-        lng: locations[i].location.displayPosition.longitude
+  findDestination(nearestDriver, destinationAddress: string) {
+    const geocoder = this.platform.getGeocodingService();
+    const geocodingParameters = {
+      searchText: destinationAddress,
+      jsonattributes: 1
+    };
+
+    geocoder.geocode(
+      geocodingParameters, (result) => {
+        this.drawDestination(result, nearestDriver, destinationAddress);
+      }, (error) => { console.log(error); }
+    );
+  }
+
+  drawDestination(destinationCoords, nearestDriver: Driver, destinationAddressString: string) {
+    const destinationRoute = destinationCoords.response.view[0].result;
+    const destinationCoord = {
+      lat: destinationRoute[0].location.displayPosition.latitude,
+      lng: destinationRoute[0].location.displayPosition.longitude
+    };
+    const pickupCoord = {
+      lat: nearestDriver.pickupLat,
+      lng: nearestDriver.pickupLng,
+      mode: 'location',
+      driverID: nearestDriver.ID
+    };
+
+    this.addLocationToMap(destinationCoord, destinationAddressString);
+    this.calculateRouteFromAtoB(pickupCoord, destinationCoord);
+
+    createRide(nearestDriver, destinationCoord, destinationAddressString, this.rideService);
+    this.snackBar.open(`Driver assigned. Car no: ${nearestDriver.ID}`, 'Close', {
+      duration: 3000
+    });
+  }
+
+  addLocationToMap(location, addressString) {
+    const marker = new H.map.Marker(location);
+    marker.setData(`Destination: ${addressString}`);
+    this.map.addObject(marker);
+    this.map.setCenter(location);
+    this.map.setZoom(14);
+  }
+
+  findNearestDriver(locationCoords) {
+    this.map.removeObjects(this.map.getObjects());
+    if (this.map.getObjects().length === 0) {
+      this.drivers.forEach((d, index) => {
+        if (d.isActive === false && (d.currentLat !== locationCoords.lat && d.currentLng !== locationCoords.lng)) {
+          const coords = {
+            lat: d.currentLat,
+            lng: d.currentLng
+          };
+          const driverLocation = new H.map.Marker(coords);
+          driverLocation.setData(index);
+          this.map.addObject(driverLocation);
+        }
+      });
+    }
+    const objects = this.map.getObjects();
+    if (objects.length !== 0) {
+      let minDist = objects[0].getPosition().distance(locationCoords);
+      let markerDist;
+      let nearestIndex = objects[0].getData();
+      const len = this.map.getObjects().length;
+
+      // iterate over objects and calculate distance between them
+      for (let i = 1; i < len; i++) {
+        markerDist = objects[i].getPosition().distance(locationCoords);
+        if (markerDist < minDist) {
+          minDist = markerDist;
+          nearestIndex = objects[i].getData();
+        }
       }
-      let marker = new H.map.Marker(location);
-      this.map.addObject(marker);
-      this.map.setCenter(location);
-      this.map.setZoom(14);
+      this.map.removeObjects(this.map.getObjects());
+      return this.drivers[nearestIndex];
+    } else {
+      return null;
     }
   }
 
   addDriverToMap(driver) {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-                 <path d="M0 0h24v24H0z" fill="none"/>
-                 <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H15V3H9v2H6.5c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-                 </svg>`
+    const coord = {
+      lat: driver.currentLat,
+      lng: driver.currentLng
+    };
+    let svg;
+    if (driver.isActive) {
+      svg = taxiBlack;
+    } else {
+      svg = taxiWhite;
+    }
     const driverIcon = new H.map.Icon(svg);
-    const marker = new H.map.Marker(driver, { icon: driverIcon });
+    const marker = new H.map.Marker(coord, { icon: driverIcon });
+    marker.setData(`Car no: ${driver.ID} Name: ${driver.firstName} ${driver.lastName}`);
     this.map.addObject(marker);
   }
 
-  calculateRouteFromAtoB(driver, location) {
+  addDriversToMap(drivers) {
+    drivers.forEach(driver => {
+      this.addDriverToMap(driver);
+    })
+  }
+
+  calculateRouteFromAtoB(waypoint1, waypoint2) {
     const router = this.platform.getRoutingService();
-    const convertCoordsDriver = driver.lat + ',' + driver.lng;
-    const convertCoordsLoc = location[0].location.displayPosition.latitude + ',' + location[0].location.displayPosition.longitude;
+    const convertCoordsWP1 = waypoint1.lat + ',' + waypoint1.lng;
+    const convertCoordsWP2 = waypoint2.lat + ',' + waypoint2.lng;
     const routeRequestParams = {
       mode: 'fastest;car',
       representation: 'display',
       routeattributes: 'waypoints,summary,shape,legs',
       maneuverattributes: 'direction,action',
-      waypoint0: convertCoordsDriver,
-      waypoint1: convertCoordsLoc
+      waypoint0: convertCoordsWP1,
+      waypoint1: convertCoordsWP2
     };
-
 
     router.calculateRoute(
       routeRequestParams, (success) => {
-        this.addRouteShapeToMap(success);
-        this.alertDispatcher(success);
+        this.addRouteShapeToMap(success, waypoint1.mode);
+        this.alertDispatcher(success, waypoint1.mode);
+        if (waypoint1.mode === 'location') {
+          fareDistance(success.response.route[0].summary.distance, this.rideService, waypoint1.driverID);
+        }
       },
       (error) => { console.log(error); }
     );
   }
 
-  addRouteShapeToMap(result) {
+  addRouteShapeToMap(result, mode) {
     const route = result.response.route[0];
     const lineString = new H.geo.LineString();
     const routeShape = route.shape;
@@ -153,22 +270,105 @@ export class MapComponent implements OnInit {
       lineString.pushLatLngAlt(parts[0], parts[1]);
     });
 
-    polyline = new H.map.Polyline(lineString, {
-      style: {
-        lineWidth: 4,
-        strokeColor: 'rgba(0, 128, 255, 0.7)'
-      }
-    });
+    if (mode === 'driver') {
+      polyline = new H.map.Polyline(lineString, {
+        style: {
+          lineWidth: 4,
+          strokeColor: 'rgba(240, 128, 128, 0.7)'
+        }
+      });
+    } else if (mode === 'location' || mode === 'location-detail') {
+      polyline = new H.map.Polyline(lineString, {
+        style: {
+          lineWidth: 4,
+          strokeColor: 'rgba(0, 128, 255, 0.7)'
+        }
+      });
+    }
+
 
     this.map.addObject(polyline);
   }
 
-  alertDispatcher(result) {
-    const route = result.response.route[0];
-    const msg = {
-      distance: toKM(route.summary.distance),
-      ETA: toMMSS(route.summary.travelTime)
+  alertDispatcher(result, mode) {
+    if (mode === 'driver') {
+      const route = result.response.route[0];
+      const msg = {
+        distance: toKM(route.summary.distance),
+        ETA: toMMSS(route.summary.travelTime),
+        mode: 'pickup'
+      };
+      this.routeParams.emit(msg);
+    } else {
+      const route = result.response.route[0];
+      const msg = {
+        distance: toKM(route.summary.distance),
+        ETA: toMMSS(route.summary.travelTime),
+        mode: 'destination'
+      };
+      this.routeParams.emit(msg);
+    }
+
+  }
+
+  removeUnwanted(index) {
+    const objects = this.map.getObjects();
+    const length = objects.length;
+    if (length - 1 !== index) {
+      const obj = objects[length - 1].setVisibility(false);
+      objects[length - 1] = obj;
+    }
+  }
+
+  showDetails(driver: Driver, ride: Ride) {
+    this.map.removeObjects(this.map.getObjects());
+    const driverCoord = {
+      lat: driver.currentLat,
+      lng: driver.currentLng,
+      mode: 'driver'
     };
-    this.routeParams.emit(msg);
+
+    if (ride !== undefined && ride != null) {
+      const destCoord = {
+        lat: ride.destinationLat,
+        lng: ride.destinationLng,
+        mode: 'location-detial'
+      };
+
+      if (driver.pickupLat !== null && driver.pickupLng !== null) {
+
+        const pickupCoord = {
+          lat: driver.pickupLat,
+          lng: driver.pickupLng,
+          mode: 'location-detail'
+        };
+
+        this.addDriverToMap(driver);
+        const markerPickup = new H.map.Marker(pickupCoord);
+        markerPickup.setData(`Destination: ${driver.pickupLocation}`);
+        this.map.addObject(markerPickup);
+        this.calculateRouteFromAtoB(driverCoord, pickupCoord);
+
+        const markerDest = new H.map.Marker(destCoord);
+        markerDest.setData(`Destination: ${driver.pickupLocation}`);
+        this.map.addObject(markerDest);
+        this.calculateRouteFromAtoB(pickupCoord, destCoord);
+
+        this.map.setCenter(destCoord);
+        this.map.setZoom(14);
+      } else {
+        this.addDriverToMap(driver);
+        const marker = new H.map.Marker(destCoord);
+        marker.setData(`Destination: ${ride.destinationLocation}`);
+        this.map.addObject(marker);
+        this.map.setCenter(destCoord);
+        this.map.setZoom(14);
+        this.calculateRouteFromAtoB(driverCoord, destCoord);
+      }
+    } else {
+      this.addDriverToMap(driver);
+      this.map.setCenter(driverCoord);
+      this.map.setZoom(14);
+    }
   }
 }

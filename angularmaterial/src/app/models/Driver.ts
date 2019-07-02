@@ -1,19 +1,16 @@
-export class Driver {
-    constructor(
-        public id: number,
-        public firstName: string,
-        public lastName: string,
-        public phone: number,
-        public car: string,
-        public color: string,
-        public licencePlate: string,
-        public currentLat: number,
-        public currentLng: number,
-        public destinationLat: number,
-        public destinationLng: number,
-        public isActive: boolean
-    ) {
-
-    }
-
+export interface Driver {
+    ID: number;
+    firstName: string;
+    lastName: string;
+    phone: number;
+    car: string;
+    color: string;
+    licencePlate: string;
+    currentLat: number;
+    currentLng: number;
+    currentLocation?: string;
+    pickupLat?: number;
+    pickupLng?: number;
+    pickupLocation?: string;
+    isActive: boolean;
 }

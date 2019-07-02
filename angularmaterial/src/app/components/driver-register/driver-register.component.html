@@ -1,6 +1,6 @@
-<div class="container">
+<form (ngSubmit)="onSubmit($event)">
   <mat-form-field>
-    <input matInput placeholder="First name" required>
+    <input matInput placeholder=" First name" required>
   </mat-form-field>
   <mat-form-field>
     <input matInput placeholder="Last name" required>
@@ -18,7 +18,7 @@
     <input matInput placeholder="Car licence plate number" required>
   </mat-form-field>
   <div class="buttons">
-    <button mat-raised-button>Confirm</button>
+    <button mat-raised-button type="submit">Confirm</button>
     <button mat-raised-button (click)="btnCancel()">Cancel</button>
   </div>
-</div>
+</form>
