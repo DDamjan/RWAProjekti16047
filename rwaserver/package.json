@@ -1,5 +1,5 @@
 {
-  "name": "angularserver",
+  "name": "rwaserver",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,12 +12,10 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "formidable": "^1.2.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "^1.9.1",
     "mssql": "^5.1.0",
-    "mv": "^2.1.1",
     "nodemon": "^1.19.1"
   }
 }

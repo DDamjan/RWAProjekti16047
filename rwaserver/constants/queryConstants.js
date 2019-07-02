@@ -1,5 +1,5 @@
 /* GENERAL */
-const REPO_PATH = `D:\\Faks\\RWAProjekti16047\\angularmaterial\\angularServer\\repo\\`;
+const REPO_PATH = `D:\\Faks\\RWAProjekti16047\\rwaserver\\repo\\`;
 function CURRENT_ID(table) {
     return `SELECT IDENT_CURRENT('${table}') as ID`;
 }

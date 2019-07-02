@@ -47,10 +47,6 @@ router.get('/currentid', async (req, res) => {
   query.execGet(req, res, queryString.CURRENT_ID('driver'));
 });
 
-router.post('/upload', async (req, res) => {
-  query.execUploadPic(req, res, queryString.REPO_PATH);
-});
-
 router.get('/picture', async (req, res) => {
   let picId = req.query.picId;
   if (picId === null || picId === undefined) {
