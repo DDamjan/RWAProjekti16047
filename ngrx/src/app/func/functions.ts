@@ -32,7 +32,7 @@ export function createRide(driver: Driver, route, address: string, rideService: 
             destinationLat: route.lat,
             destinationLng: route.lng,
             destinationLocation: address,
-            startLocation: driver.currentLocation,
+            startLocation: driver.pickupLocation,
             startTime: startingTime,
             isCanceled: false
         };

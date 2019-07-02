@@ -96,6 +96,9 @@ export class DriverDetailsComponent implements OnInit {
     this.currentRide.endTime = `${dateTime.getFullYear()}-${dateTime.getMonth() + 1}-${dateTime.getDay()} ${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
     this.rideService.updateRide(this.currentRide).subscribe();
     this.driver.isActive = false;
+    this.driver.currentLat = this.currentRide.destinationLat;
+    this.driver.currentLng = this.currentRide.destinationLng;
+    this.driver.currentLocation = this.currentRide.destinationLocation;
     this.store.dispatch(new driverActions.UpdateDriver(this.driver));
     this.dataTable.onChange(this.currentRide);
     this.currentRide = null;
