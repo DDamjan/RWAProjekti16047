@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 
 var driverRouter = require('./routes/drivers');
 var ridesRouter = require('./routes/rides');
+var usersRouter = require('./routes/users');
+var playlistsRouter = require('./routes/playlists');
 
 var app = express();
 
@@ -22,6 +24,8 @@ app.use(cors());
 
 app.use('/drivers', driverRouter);
 app.use('/rides', ridesRouter);
+app.use('/users', usersRouter);
+app.use('/playlists', playlistsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

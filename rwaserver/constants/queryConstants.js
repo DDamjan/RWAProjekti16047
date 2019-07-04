@@ -43,6 +43,24 @@ function CANCEL_RIDE(ID, driverID, endTime) {
 function ADD_DISTANCE_FARE(distance, fare, ID) {
     return `update rides set fare = ${fare}, distance = '${distance}' where ID = (select ID from rides where endTime is null and isCanceled = 0 and driverID = ${ID})`;
 }
+
+/* Users */
+
+const GET_USER_BY_ID = 'Select ID, Username from reduxedUsers where ID = ';
+function AUTH_USER (username, password){
+    return `Select ID, Username from reduxedUsers where Username = '${username}' and Password = '${password}'`;
+} 
+function REGISTER_USER (Username, Password){
+    return `insert into reduxedUsers (Username, Password) values ('${Username}', '${Password}')`;
+}
+
+/* Playlists */
+
+const GET_PLAYLISTS = 'Select * from reduxedPlaylist where ownerID = ';
+function ADD_PLAYLIST (name, ownerID){
+    return `Insert into reduxedPlaylist (name, ownerID) values ('${name}', ${ownerID})`;
+}
+
 module.exports = {
     ADD_DRIVER: ADD_DRIVER,
     GET_DRIVERS: GET_DRIVERS,
@@ -55,6 +73,11 @@ module.exports = {
     GET_RIDES: GET_RIDES,
     ADD_DISTANCE_FARE: ADD_DISTANCE_FARE,
     CANCEL_RIDE: CANCEL_RIDE,
-    UPDATE_DRIVER: UPDATE_DRIVER
+    UPDATE_DRIVER: UPDATE_DRIVER,
+    AUTH_USER: AUTH_USER,
+    REGISTER_USER: REGISTER_USER,
+    GET_USER_BY_ID: GET_USER_BY_ID,
+    GET_PLAYLISTS: GET_PLAYLISTS,
+    ADD_PLAYLIST: ADD_PLAYLIST
 
 }

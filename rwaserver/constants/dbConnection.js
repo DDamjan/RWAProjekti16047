@@ -2,7 +2,7 @@ const USER_NAME = 'sa';
 const PASSWORD = 'SWESOApp';
 const SERVER_LOCAL = 'localhost';
 const SERVER_WEB = 'denicdamjan.ddns.net';
-const DATABASE = 'NGDispatch';
+const DATABASE = 'RWA';
 
 module.exports = {
     USER_NAME: USER_NAME,

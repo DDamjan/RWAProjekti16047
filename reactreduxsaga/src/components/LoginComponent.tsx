@@ -1,89 +1,134 @@
-import { Component } from "react";
-import Cookie from 'universal-cookie';
-import {Redirect} from 'react-router-dom';
-import {Form, FormGroup, FormControl, Button,} from 'react-bootstrap'
+import React, { Component } from "react";
+import { Redirect, Link } from 'react-router-dom';
+import { Form, Button } from 'react-bootstrap';
+import { User } from "../models/user";
+import { connect } from "react-redux";
+import Cookies from "universal-cookie";
+import { AppState } from "../store/store";
+import "../style/login.css"
+import { authUser, authUserSuccess } from "../store/actions/userActions";
+import { Dispatch, Action } from "redux";
+import { dbAuthUser } from "../service/userService";
 
 
-interface Props{
-
+interface Props {
+    user: User;
+    authUser: (user: User) => void;
 }
 
-interface State{
+interface State {
     username: string;
     password: string;
+    user?: User;
 }
 
-class LoginComponent extends Component<Props, any>{
-    constructor (props: Props){
+class LoginComponent extends Component<Props, any> {
+
+    constructor(props: Props) {
         super(props);
         this.state = {
             username: "",
             password: ""
-
         };
     }
 
-    validateForm(){
-        return this.state.username.length > 0 && this.state.password.length >0;
+    validateForm() {
+        return this.state.username.length > 0 && this.state.password.length > 0;
     }
 
-    changeHandler = (event: any) =>{
-       this.setState({
-           [event.target.id]: event.target.value
-       });
-    }
-
-    submitHandler = (event: any) => {
-        event.preventDefault();
-
-        const cookies = new Cookie();
-
-        cookies.set('logged in', this.state.username, {path: '/'});
-
+    handleChange = (event: any) => {
         this.setState({
-            redirect: true
+            [event.target.id]: event.target.value
         });
     }
 
-    redirectRender(){
-        if (this.state.redirect){
+    handleSubmit = (event: any) => {
+        event.preventDefault();
+        dbAuthUser(this.state.username, this.state.password).then(user=>{
+            if (user.length === 0) {
+                this.setState({
+                    password: "",
+                    error: "Invalid username or password."
+                })
+            }else{
+                this.props.authUser(user);
+                const cookies = new Cookies();
+                cookies.set('logedIn', user[0].ID, { path: '/' });
+        
+                this.setState({
+                    redirect: true
+                });
+                return;
+            }
+        });
+
+    }
+
+    renderRedirect() {
+        if (this.state.redirect) {
             return <Redirect to='/' />
         }
     }
 
-    render(){
-        return(
-            <div className = "Login">
-                {this.redirectRender()}
-                <Form onSubmit={this.submitHandler}>
-                    <Form.Group controlId="username">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control 
-                            autoFocus
-                            type="text"
-                            value={this.state.username}
-                            onChange={this.changeHandler}
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="password">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={this.state.password}
-                            onChange={this.changeHandler}
-                        />
-                    </Form.Group>
-                    <Button
-                        block
-                        disabled={!this.validateForm()}
-                        type="submit"
-                    >
-                        Login
+    renderErrorMessage() {
+        if (this.state.error != null) {
+            return (
+                <small className="text-danger">
+                    {this.state.error}
+                </small>
+            )
+        }
+    }
+
+    render() {
+        return (
+            <div className="Login-container">
+                <div className="Login">
+                    {this.renderRedirect()}
+                    <span>Reduxed Player</span>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Form.Group controlId="username"  >
+                            <Form.Control
+                                placeholder="username"
+                                autoFocus
+                                type="text"
+                                value={this.state.username}
+                                onChange={this.handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="password">
+                            <Form.Control
+                                placeholder="username"
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                                type="password"
+                            />
+                            {this.renderErrorMessage()}
+                        </Form.Group>
+                        <Button
+                            block
+                            disabled={!this.validateForm()}
+                            type="submit"
+                        >
+                            Login
                     </Button>
-                </Form>
+                    </Form>
+                    <p>Don't have an account? <Link to="/register">Register</Link></p>
+                </div>
             </div>
         );
     }
 }
 
-export default LoginComponent;
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+    return {
+        authUser: (user: User) => dispatch(authUserSuccess(user))
+    }
+}
+function mapStateToProps(state: AppState) {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

@@ -1,6 +1,7 @@
 body {
     background-image: url("../resources/welcome.jpg");
     background-size: cover;
+    background-repeat: no-repeat;
     background-color: #0c0129;
     background-blend-mode: soft-light;
 }

@@ -1,3 +1,9 @@
 export interface Track{
-    trackId: number
+    ID: number;
+    trackArtist: string;
+    trackDuration: number;
+    trackTitle: string;
+    albumCover: string;
+    albumName: string;
+    URL: string;
 }

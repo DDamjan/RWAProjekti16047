@@ -1,5 +1,0 @@
-export const TRACKS_SET = 'TRACKS_SET';
-export const INPUT_VALUE = 'INPUT_VALUE';
-export const ARTIST_ID = 'ARTIST_ID';
-export const AUTOCOMPLETE_RESULTS = 'AUTOCOMPLETE_RESULTS';
-export const ALBUM_RESULTS = 'ALBUM_RESULTS';
