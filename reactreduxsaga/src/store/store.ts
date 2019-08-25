@@ -8,11 +8,13 @@ import { sAuthUser, sRegisterUser, sFetchPlaylists, sAddPlaylists, sDeletePlayli
 import { User } from "../models/user";
 import { Playlist } from "../models/playlist";
 import { Track } from "../models/Track";
+import { userState } from "./reducers/userReducer";
+import { playlistState } from "./reducers/playlistReducer";
 
 export interface AppState {
-    user: User;
+    user: userState;
     currentPlaylist: Playlist;
-    playlists: Playlist[];
+    playlist: playlistState;
     currentTrack: Track;
 }
 
@@ -29,13 +31,13 @@ function configureStore() {
 
 export function* rootSaga(){
     yield takeEvery (AUTH_USER, sAuthUser);
-    yield takeEvery (REGISTER_USER, sRegisterUser);
     yield takeEvery (FETCH_PLAYLISTS, sFetchPlaylists);
     yield takeEvery (ADD_PLAYLIST, sAddPlaylists);
     yield takeEvery (DELETE_PLAYLIST, sDeletePlaylist);
     yield takeEvery (ADD_TRACK, sAddTrack);
     yield takeEvery (REMOVE_TRACK, sRemoveTrack);
     yield takeEvery (GET_USER_BY_ID, sGetUserByID);
+    yield takeEvery (REGISTER_USER, sRegisterUser);
 
 }
 

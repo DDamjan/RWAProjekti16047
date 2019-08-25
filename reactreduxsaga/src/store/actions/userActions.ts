@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { REGISTER_USER, REGISTER_USER_SUCCESS, AUTH_USER, AUTH_USER_SUCCESS, GET_USER_BY_ID, GET_USER_BY_ID_SUCCESS } from "./types";
+import { REGISTER_USER, REGISTER_USER_SUCCESS, AUTH_USER, AUTH_USER_SUCCESS, GET_USER_BY_ID, GET_USER_BY_ID_SUCCESS, REGISTER_USER_FAIL } from "./types";
 import { User } from "../../models/user";
 
 export interface AuthUser extends Action {
@@ -27,13 +27,17 @@ export function authUserSuccess(_user: User): AuthUserSuccess {
 }
 
 export interface RegisterUser extends Action {
-    user: User;
+    user:any
 }
 
-export function registerUser(_user: User): RegisterUser {
+export function registerUser(username: string, password: string, confirmPassword: string): RegisterUser {
     return {
         type: REGISTER_USER,
-        user: _user
+        user:{
+        Username: username,
+        Password: password,
+        confirmPassword
+        }
     };
 }
 
@@ -45,6 +49,17 @@ export function registerUserSuccess(_user: User): RegisterUserSuccess {
     return {
         type: REGISTER_USER_SUCCESS,
         user: _user
+    };
+}
+
+export interface RegisterUserFail extends Action {
+    error: string;
+}
+
+export function registerUserFail(error: string): RegisterUserFail {
+    return {
+        type: REGISTER_USER_FAIL,
+        error
     };
 }
 

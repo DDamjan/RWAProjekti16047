@@ -6,7 +6,7 @@ import { FETCH_PLAYLISTS_SUCCESS, ADD_PLAYLIST_SUCCESS, DELETE_PLAYLIST_SUCCESS,
 import { GetPlaylists, GetPlaylistsSuccess, AddPlaylistSuccess, DeletePlaylistSuccess, CurrentPlaylist, CurrentTrack, AddTrackSuccess } from "../actions/playlistActions";
 import { Track } from "../../models/Track";
 
-interface playlistState {
+export interface playlistState {
     currentPlaylist: Playlist;
     playlists: Playlist[];
     currentTrack: Track;

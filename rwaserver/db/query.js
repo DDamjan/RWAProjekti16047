@@ -32,6 +32,21 @@ async function execPost(req, res, query) {
   }
 }
 
+async function execRegister(req, res, query) {
+  try {
+    const pool = await poolPromise;
+    let result = await pool.request()
+      .input('input_parameter', sql.Int, req.query.input_parameter)
+      .query(query);
+    res.json(result.recordset);
+    res.end();
+  } catch (err) {
+    res.status(500);
+    res.send(err.message);
+    res.end();
+  }
+}
+
 async function execFile(res, path) {
   try {
     res.sendFile(path);
@@ -61,7 +76,7 @@ async function execUser(req, res, ID) {
   let data = {
     ID: user[0].ID,
     Username: user[0].Username,
-    playlists:playlists
+    playlists: playlists
   }
 
   res.json(data);
@@ -71,5 +86,6 @@ module.exports = {
   execGet: execGet,
   execPost: execPost,
   execFile: execFile,
-  execUser: execUser
+  execUser: execUser,
+  execRegister: execRegister
 }

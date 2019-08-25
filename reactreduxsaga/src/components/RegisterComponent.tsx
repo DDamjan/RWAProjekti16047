@@ -6,29 +6,33 @@ import { connect } from "react-redux";
 import Cookies from "universal-cookie";
 import { AppState } from "../store/store";
 import "../style/login.css"
-import { authUser, authUserSuccess } from "../store/actions/userActions";
+import { authUser, authUserSuccess, registerUserSuccess, registerUser } from "../store/actions/userActions";
 import { Dispatch, Action } from "redux";
-import { dbAuthUser } from "../service/userService";
+import { userState } from "../store/reducers/userReducer";
 
 
 interface Props {
     user: User;
-    authUser: (user: User) => void;
+    registerUser: (username: string, password: string, passwordConfirm: string) => void;
+    error: string;
 }
 
 interface State {
     username: string;
     password: string;
+    passwordConfirm: string;
     user?: User;
+    error?: string;
 }
 
-class LoginComponent extends Component<Props, any> {
+class RegisterComponent extends Component<Props, any> {
 
     constructor(props: Props) {
         super(props);
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            passwordConfirm: ""
         };
     }
 
@@ -44,25 +48,17 @@ class LoginComponent extends Component<Props, any> {
 
     handleSubmit = (event: any) => {
         event.preventDefault();
-        dbAuthUser(this.state.username, this.state.password).then(user=>{
-            if (user.length === 0) {
-                this.setState({
-                    password: "",
-                    error: "Invalid username or password."
-                })
-            }else{
-                this.props.authUser(user);
-                const cookies = new Cookies();
-                cookies.set('logedIn', user[0].ID, { path: '/' });
-        
-                this.setState({
-                    redirect: true
-                });
-                return;
-            }
-        });
-
+        this.props.registerUser(this.state.username, this.state.password, this.state.passwordConfirm);
+        console.log(this.props);
+        console.log(this.props.error);
+        if (!this.props.error) {
+            this.setState({
+                redirect: true
+            });
+            return;
+        }
     }
+
 
     renderRedirect() {
         if (this.state.redirect) {
@@ -71,10 +67,10 @@ class LoginComponent extends Component<Props, any> {
     }
 
     renderErrorMessage() {
-        if (this.state.error != null) {
+        if (this.props.error != null) {
             return (
                 <small className="text-danger">
-                    {this.state.error}
+                    {this.props.error}
                 </small>
             )
         }
@@ -85,8 +81,9 @@ class LoginComponent extends Component<Props, any> {
             <div className="Login-container">
                 <div className="Login">
                     {this.renderRedirect()}
-                    <span>Reduxed Player</span>
+                    <span>Create account</span>
                     <Form onSubmit={this.handleSubmit}>
+                        {this.renderErrorMessage()}
                         <Form.Group controlId="username"  >
                             <Form.Control
                                 placeholder="username"
@@ -103,17 +100,24 @@ class LoginComponent extends Component<Props, any> {
                                 onChange={this.handleChange}
                                 type="password"
                             />
-                            {this.renderErrorMessage()}
+                        </Form.Group>
+                        <Form.Group controlId="passwordConfirm">
+                            <Form.Control
+                                placeholder="confirm password"
+                                value={this.state.passwordConfirm}
+                                onChange={this.handleChange}
+                                type="password"
+                            />
                         </Form.Group>
                         <Button
                             block
                             disabled={!this.validateForm()}
                             type="submit"
                         >
-                            Login
+                            Register
                     </Button>
                     </Form>
-                    <p>Don't have an account? <Link to="/register">Register</Link></p>
+                    <p>Already have an account? <Link to="/login">Log in</Link></p>
                 </div>
             </div>
         );
@@ -122,13 +126,14 @@ class LoginComponent extends Component<Props, any> {
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
     return {
-        authUser: (user: User) => dispatch(authUserSuccess(user))
+        registerUser: (username: string, password: string, passwordConfirm: string) => dispatch(registerUser(username, password, passwordConfirm))
     }
 }
 function mapStateToProps(state: AppState) {
     return {
-        user: state.user.user
+        user: state.user.user,
+        error: state.user.error
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterComponent);

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom
 import Cookies from 'universal-cookie';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
+import RegisterComponent from './components/RegisterComponent';
 
 const App: React.FC = () => {
 
@@ -23,6 +24,7 @@ const App: React.FC = () => {
       )}>
       </Route>
       <Route path="/login" component={LoginComponent}></Route>
+      <Route path="/register" component={RegisterComponent}></Route>
     </Router>
   );
 }

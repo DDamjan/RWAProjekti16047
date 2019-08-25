@@ -7,8 +7,8 @@ function CURRENT_ID(table) {
 /* DRIVERS */
 const GET_DRIVERS = 'select * from driver';
 const GET_DRIVER = 'select * from driver where ID = ';
-function DELETE_DRIVER (ID){
-   return `delete from rides where driverID = ${ID};
+function DELETE_DRIVER(ID) {
+    return `delete from rides where driverID = ${ID};
            delete from driver where ID = ${ID}`;
 }
 
@@ -18,7 +18,7 @@ function ADD_DRIVER(firstName, lastName, phone, car, color, licencePlate, curren
             values ('${firstName}', '${lastName}', ${phone}, '${car}', '${color}', '${licencePlate}', ${currentLat}, ${currentLng}, '${currentLocation}', 0)`;
 }
 
-function UPDATE_DRIVER(pickupLat, pickupLng, pickupLocation, ID){
+function UPDATE_DRIVER(pickupLat, pickupLng, pickupLocation, ID) {
     return `update driver set pickupLat = ${pickupLat}, pickupLng = ${pickupLng}, pickupLocation = '${pickupLocation}' where ID = ${ID}`
 }
 
@@ -45,19 +45,22 @@ function ADD_DISTANCE_FARE(distance, fare, ID) {
 }
 
 /* Users */
-
 const GET_USER_BY_ID = 'Select ID, Username from reduxedUsers where ID = ';
-function AUTH_USER (username, password){
+function AUTH_USER(username, password) {
     return `Select ID, Username from reduxedUsers where Username = '${username}' and Password = '${password}'`;
-} 
-function REGISTER_USER (Username, Password){
-    return `insert into reduxedUsers (Username, Password) values ('${Username}', '${Password}')`;
 }
+function REGISTER_USER(Username, Password) {
+    return `insert into reduxedUsers (Username, Password) values ('${Username}', '${Password}'); Select ID, Username from reduxedUsers where Username like '${Username}'`;
+}
+function CHECK_USERNAME(Username) {
+    return `Select Username from reduxedUsers where Username = '${Username}'`;
+}
+
 
 /* Playlists */
 
 const GET_PLAYLISTS = 'Select * from reduxedPlaylist where ownerID = ';
-function ADD_PLAYLIST (name, ownerID){
+function ADD_PLAYLIST(name, ownerID) {
     return `Insert into reduxedPlaylist (name, ownerID) values ('${name}', ${ownerID})`;
 }
 
@@ -77,6 +80,7 @@ module.exports = {
     AUTH_USER: AUTH_USER,
     REGISTER_USER: REGISTER_USER,
     GET_USER_BY_ID: GET_USER_BY_ID,
+    CHECK_USERNAME: CHECK_USERNAME,
     GET_PLAYLISTS: GET_PLAYLISTS,
     ADD_PLAYLIST: ADD_PLAYLIST
 

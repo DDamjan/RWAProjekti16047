@@ -3,6 +3,7 @@ export const AUTH_USER: string = "AUTH_USER";
 export const AUTH_USER_SUCCESS: string = "AUTH_USER_SUCCESS"
 export const REGISTER_USER: string = "REGISTER_USER";
 export const REGISTER_USER_SUCCESS: string = "REGISTER_USER_SUCCESS";
+export const REGISTER_USER_FAIL: string = "REGISTER_USER_FAIL";
 export const GET_USER_BY_ID: string = "GET_USER_BY_ID";
 export const GET_USER_BY_ID_SUCCESS: string = "GET_USER_BY_ID_SUCCESS";
 

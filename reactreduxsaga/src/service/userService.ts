@@ -3,10 +3,14 @@ import { User } from '../models/user';
 
 const baseURL = 'http://localhost:8080/users/';
 
-export function dbRegisterUser(user: User) {
+export function dbRegisterUser(username: string, password: string) {
     const url = baseURL + 'register';
+    const payload = {
+        username,
+        password
+    }
 
-    return fetch(url, { method: "POST", body: JSON.stringify(user), headers: { "Content-Type": "application/json" } }).
+    return fetch(url, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } }).
         then(res => res.json());
 }
 
@@ -26,4 +30,10 @@ export function dbGetUserByID(ID: number) {
 
     return fetch(url).
         then(res => res.json());
+}
+
+export function dbCheckUsername(username: string) {
+    const url = `${baseURL}checkuser/?username=${username}`;
+
+    return fetch(url).then(res=> res.json());
 }

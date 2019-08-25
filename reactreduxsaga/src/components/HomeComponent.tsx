@@ -53,7 +53,7 @@ class HomeComponent extends Component<Props, any>{
                     {this.renderRedirect}
                     <Link to="/" style={{ textDecoration: 'none', color: 'white' }}><h1>Reduxed player</h1></Link>
                     {this.renderName()}
-                    <p style={{ cursor: 'pointer', color: 'white' }} onClick={this.logout.bind(this)}>Log out</p>
+                    <p style={{ cursor: 'pointer', color: 'white' }} onClick={this.logout.bind(this)}><Link to="/login">Log out</Link></p>
                 </div>
                 <div className="addPlaylist">
                     <div className="playlist-container">
@@ -75,7 +75,7 @@ class HomeComponent extends Component<Props, any>{
                                 disabled={!this.validateForm()}
                                 type="submit"
                             >
-                               Add playlist
+                                Add playlist
                             </Button>
                         </Form>
                     </div>
@@ -95,12 +95,12 @@ class HomeComponent extends Component<Props, any>{
     }
 
     renderCards() {
-        const cards = [];
-        if (this.props.currentUser.user !== undefined)
-            this.props.currentUser.user.playlists.forEach(playlist => {
-                cards.push(<PlaylistComponent playList={playlist} />)
+        if (this.props.currentUser.user !== undefined && this.props.currentUser.user.playlists) {
+            return this.props.currentUser.user.playlists.map(playlist => {
+                return (<PlaylistComponent playList={playlist} />)
             })
-        return cards;
+        }
+        return null;
     }
 
     validateForm() {
@@ -120,7 +120,7 @@ class HomeComponent extends Component<Props, any>{
             ownerID: this.props.currentUser.user.ID,
             trackURLs: [],
             tracks: [],
-            ID: this.props.currentUser.user.playlists[this.props.currentUser.user.playlists.length-1].ID + 1
+            ID: this.props.currentUser.user.playlists[this.props.currentUser.user.playlists.length - 1].ID + 1
         }
         this.props.currentUser.user.playlists.push(playlist);
 
@@ -128,7 +128,7 @@ class HomeComponent extends Component<Props, any>{
         this.forceUpdate();
     }
 
-    logout(){
+    logout() {
         const cookies = new Cookies();
         cookies.remove('logedIn');
     }
