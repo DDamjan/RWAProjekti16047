@@ -5,7 +5,6 @@ import rootReducer from './reducers'
 import { takeEvery } from '@redux-saga/core/effects';
 import { REGISTER_USER, FETCH_PLAYLISTS, ADD_PLAYLIST, DELETE_PLAYLIST, ADD_TRACK, REMOVE_TRACK, AUTH_USER, GET_USER_BY_ID } from "./actions/types";
 import { sAuthUser, sRegisterUser, sFetchPlaylists, sAddPlaylists, sDeletePlaylist, sAddTrack, sRemoveTrack, sGetUserByID } from "./sagas";
-import { User } from "../models/user";
 import { Playlist } from "../models/playlist";
 import { Track } from "../models/Track";
 import { userState } from "./reducers/userReducer";

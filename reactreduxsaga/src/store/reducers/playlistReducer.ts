@@ -38,21 +38,21 @@ export default function (state = initialState, action: Action) {
             const {ID} = action as DeletePlaylistSuccess;
             return{
                 ...state,
-                playlists: state.playlists.filter((playlist: Playlist)=>{playlist.ID != ID})
+                playlists: state.playlists.filter((playlist: Playlist)=>playlist.ID != ID)
             }
         }
         case CURRENT_PLAYLIST:{
             const {ID} = action as CurrentPlaylist;
             return{
                 ...state,
-                currentPlaylist: state.playlists.filter((playlist: Playlist)=> {playlist.ID === ID}).pop()
+                currentPlaylist: state.playlists.filter((playlist: Playlist)=> playlist.ID === ID).pop()
             }
         }
         case CURRENT_TRACK:{
             const{ID} = action as CurrentTrack;
             return{
                 ...state,
-                currentTrack: state.currentPlaylist.tracks.filter((track: Track)=> {track.ID === ID}).pop()
+                currentTrack: state.currentPlaylist.tracks.filter((track: Track)=> track.ID === ID).pop()
             }
         }
         case ADD_TRACK_SUCCESS:{
@@ -66,7 +66,7 @@ export default function (state = initialState, action: Action) {
             const {ID} = action as DeletePlaylistSuccess;
             return{
                 ...state,
-                currentPlaylist: state.currentPlaylist.tracks.filter((track: Track)=> {track.ID !== ID})
+                currentPlaylist: state.currentPlaylist.tracks.filter((track: Track)=> track.ID !== ID)
             }
         }
         default: return state;

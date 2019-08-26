@@ -3,12 +3,10 @@ import { Redirect, Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { User } from "../models/user";
 import { connect } from "react-redux";
-import Cookies from "universal-cookie";
 import { AppState } from "../store/store";
-import "../style/login.css"
-import { authUser, authUserSuccess, registerUserSuccess, registerUser } from "../store/actions/userActions";
+import "../style/register.css"
+import { registerUser } from "../store/actions/userActions";
 import { Dispatch, Action } from "redux";
-import { userState } from "../store/reducers/userReducer";
 
 
 interface Props {
@@ -49,9 +47,8 @@ class RegisterComponent extends Component<Props, any> {
     handleSubmit = (event: any) => {
         event.preventDefault();
         this.props.registerUser(this.state.username, this.state.password, this.state.passwordConfirm);
-        console.log(this.props);
-        console.log(this.props.error);
-        if (!this.props.error) {
+        debugger;
+        if (this.props.error === "") {
             this.setState({
                 redirect: true
             });
@@ -78,8 +75,8 @@ class RegisterComponent extends Component<Props, any> {
 
     render() {
         return (
-            <div className="Login-container">
-                <div className="Login">
+            <div className="Register-container">
+                <div className="Register">
                     {this.renderRedirect()}
                     <span>Create account</span>
                     <Form onSubmit={this.handleSubmit}>

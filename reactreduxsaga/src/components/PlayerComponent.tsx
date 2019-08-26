@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Track } from "../models/Track";
 import { User } from "../models/user";
 import { Playlist } from "../models/playlist";
-import TrackDetailsComponent from "./TrackDetails";
+import TrackDetailsComponent from "./TrackDetailsComponent";
 import ReactMediaVisualizer from 'react-media-visualizer'
 
 interface Props {
@@ -39,7 +39,7 @@ class PlayerComponent extends Component<Props, State>{
                 </div>
                 <div className="Player-container">
                     <div className="player">
-                        <TrackDetailsComponent currentTrack={this.props.playlist.tracks[0]} />
+                        <TrackDetailsComponent track={this.props.playlist.tracks[0]} />
                     </div>
                     <div className="queue">
                         <ol>

@@ -1,13 +1,24 @@
-import React, { Component } from "react";
-import { Playlist } from "../models/playlist";
-import { Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import { Button } from 'react-bootstrap';
+import Typography from '@material-ui/core/Typography';
+import { Playlist } from '../models/playlist';
+import { User } from '../models/user';
+import { AppState } from '../store/store';
+import { Dispatch, Action } from "redux";
+import { connect } from "react-redux";
+import { deletePlaylist } from '../store/actions/playlistActions';
+import { Link } from 'react-router-dom';
 
 interface Props {
     playList: Playlist;
+    deletePlaylist: (playlistID: number) => void;
 }
 
 interface State {
+    user: User
 }
 
 class PlaylistComponent extends Component<Props, State>{
@@ -15,32 +26,37 @@ class PlaylistComponent extends Component<Props, State>{
     render() {
         return (
             <Card>
-                <Card.Body>
-                    <Card.Title>
+                <CardContent>
+                    <Typography variant="body2" component="p">
                         {this.props.playList.name}
-                        <Link to={"/playlist/" + this.props.playList.ID}><i className="fas fa-play-circle"></i></Link>
-                        <a onClick={this.deletePlaylist}><i className="fas fa-trash-alt"></i></a>
-                    </Card.Title>
-                    <Card.Text>
-                        {
-                            () => {
-                                if (this.props.playList.tracks.length > 0) {
-                                    return `'${this.props.playList.tracks[0].trackTitle}',${this.props.playList.tracks[1].trackTitle} and ${this.props.playList.tracks.length - 2} more`;
-                                }
-                                else {
-                                    return 'No songs added';
-                                }
-                            }
-                        }
-                    </Card.Text>
-                </Card.Body>
+                        <br />
+                    </Typography>
+                </CardContent>
+                <CardActions>
+                    <Link to={"/playlist/" + this.props.playList.ID} >
+                        <Button variant="light">Open</Button>
+                    </Link>
+                    <Button variant="light" onClick={this.handleDelete.bind(this)}>Delete</Button>
+                </CardActions>
             </Card>
-        )
+        );
     }
 
-    deletePlaylist() {
+    handleDelete() {
+        this.props.deletePlaylist(this.props.playList.ID);
+    }
 
+}
+
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+    return {
+        deletePlaylist: (playlistID: number) => dispatch(deletePlaylist(playlistID))
+    }
+}
+function mapStateToProps(state: AppState) {
+    return {
+        user: state.user
     }
 }
 
-export default PlaylistComponent;
+export default connect(mapStateToProps, mapDispatchToProps)(PlaylistComponent);

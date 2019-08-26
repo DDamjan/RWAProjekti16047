@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-expressions */
 import { User } from "../../models/user";
 import { Action } from "redux";
-import { REGISTER_USER_SUCCESS, AUTH_USER_SUCCESS, GET_USER_BY_ID_SUCCESS, ADD_PLAYLIST_SUCCESS, REGISTER_USER_FAIL } from "../actions/types";
+import { REGISTER_USER_SUCCESS, AUTH_USER_SUCCESS, GET_USER_BY_ID_SUCCESS, REGISTER_USER_FAIL, ADD_PLAYLIST_SUCCESS, DELETE_PLAYLIST_SUCCESS } from "../actions/types";
 import { AuthUserSuccess, RegisterUserSuccess, GetUserByIDSuccess, RegisterUserFail } from "../actions/userActions";
-import { AddPlaylist } from "../actions/playlistActions";
-import { userInfo } from "os";
+import { AddPlaylistSuccess, DeletePlaylistSuccess } from "../actions/playlistActions";
+import { Playlist } from "../../models/playlist";
 
 export interface userState {
   user?: User;
@@ -24,6 +25,20 @@ export default function (state = initialState, action: Action): userState {
         user: user
       };
     }
+    case ADD_PLAYLIST_SUCCESS: {
+      const { playlist } = action as AddPlaylistSuccess;
+      return {
+        ...state,
+        user: {...state.user, playlists:[...state.user.playlists, playlist] }
+      };
+    }
+    case DELETE_PLAYLIST_SUCCESS: {
+      const { ID } = action as DeletePlaylistSuccess;
+      return {
+        ...state,
+        user: {...state.user, playlists: state.user.playlists.filter((playlist: Playlist)=> playlist.ID != ID) }
+      };
+    }
     case REGISTER_USER_SUCCESS: {
       const { user } = action as RegisterUserSuccess;
       console.log(action);
@@ -40,8 +55,8 @@ export default function (state = initialState, action: Action): userState {
         error
       }
     }
-    case GET_USER_BY_ID_SUCCESS:{
-      const {user} = action as GetUserByIDSuccess;
+    case GET_USER_BY_ID_SUCCESS: {
+      const { user } = action as GetUserByIDSuccess;
       return {
         ...state,
         user: user

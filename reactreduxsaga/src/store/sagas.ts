@@ -47,13 +47,14 @@ export function* sFetchPlaylists(playlist: GetPlaylists) {
 }
 
 export function* sAddPlaylists(playlist: AddPlaylist) {
-    const dbPlaylist = yield dbAddPlaylist(playlist.playlist);
-    yield put(addPlaylistSuccess(dbPlaylist));
+    const dbPlaylist = yield dbAddPlaylist(playlist);
+    console.log(dbPlaylist);
+    yield put(addPlaylistSuccess(dbPlaylist[0]));
 }
 
 export function* sDeletePlaylist(playlist: DeletePlaylist) {
-    const dbPlaylist = yield dbDeletePlaylist(playlist.ID);
-    yield put(deletePlaylistSuccess(dbPlaylist));
+    const deletedPlaylistID = yield dbDeletePlaylist(playlist.ID);
+    yield put(deletePlaylistSuccess(deletedPlaylistID.id));
 }
 
 export function* sAddTrack(track: AddTrack) {

@@ -8,8 +8,14 @@ async function execGet(req, res, query) {
     const result = await pool.request()
       .input('input_parameter', sql.Int, req.query.input_parameter)
       .query(query);
-    res.json(result.recordset);
-    res.end();
+      if (result.recordset== undefined){
+        res.json(req.query);
+        res.send();
+      }
+      else{
+        res.json(result.recordset);
+        res.end();
+      }
   } catch (err) {
     res.status(500);
     res.send(err.message);
@@ -23,8 +29,14 @@ async function execPost(req, res, query) {
     const result = await pool.request()
       .input('input_parameter', sql.Int, req.query.input_parameter)
       .query(query);
-    res.json(req.body);
-    res.end();
+      if (result.recordset== undefined){
+        res.json(req.body);
+        res.send();
+      }
+      else{
+        res.json(result.recordset);
+        res.end();
+      }
   } catch (err) {
     res.status(500);
     res.send(err.message);

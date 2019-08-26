@@ -26,13 +26,13 @@ export function getPlaylistsSuccess(_playlists: Playlist[]): GetPlaylistsSuccess
 }
 
 export interface AddPlaylist extends Action {
-    playlist: Playlist;
+    payload: any;
 }
 
-export function addPlaylist(_playlist: Playlist): AddPlaylist {
+export function addPlaylist(payload: any): AddPlaylist {
     return {
         type: ADD_PLAYLIST,
-        playlist: _playlist
+        payload
     };
 }
 
@@ -40,10 +40,10 @@ export interface AddPlaylistSuccess extends Action {
     playlist: Playlist;
 }
 
-export function addPlaylistSuccess(_playlist: Playlist): AddPlaylistSuccess {
+export function addPlaylistSuccess(playlist: Playlist): AddPlaylistSuccess {
     return {
         type: ADD_PLAYLIST_SUCCESS,
-        playlist: _playlist
+        playlist
     };
 }
 
@@ -62,10 +62,10 @@ export interface DeletePlaylistSuccess extends Action {
     ID: number;
 }
 
-export function deletePlaylistSuccess(id: number): DeletePlaylistSuccess {
+export function deletePlaylistSuccess(ID: number): DeletePlaylistSuccess {
     return{
         type: DELETE_PLAYLIST_SUCCESS,
-        ID: id
+        ID
     };
 }
 

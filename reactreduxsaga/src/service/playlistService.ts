@@ -10,18 +10,22 @@ export function dbGetPlaylists(ID: number) {
         then(res => res.json());
 }
 
-export function dbAddPlaylist(playlist: Playlist) {
-    const url = baseURL + "/addplaylist";
+export function dbAddPlaylist(payload: any) {
+    const url = baseURL + "add";
 
-    return fetch(url, { method: "POST", body: JSON.stringify(playlist), headers: { "Content-Type": "application/json" } }).
-        then(res=> res.json());
+    return fetch(url, { method: "POST", body: JSON.stringify(payload.payload), headers: { "Content-Type": "application/json" } }).
+        then(res => res.json());
 }
 
 export function dbDeletePlaylist(ID: number) {
-    const url = baseURL + "/delete";
+    const url = baseURL + "delete";
 
-    return fetch(url, { method: "POST", body: JSON.stringify(ID), headers: { "Content-Type": "application/json" } }).
-        then(res=> res.json());
+    const payload = {
+        ID
+    }
+
+    return fetch(url, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } }).
+        then(res => res.json());
 }
 
 export function dbAddTrack(track: Track, trackID: number) {
@@ -32,10 +36,10 @@ export function dbAddTrack(track: Track, trackID: number) {
     }
 
     return fetch(url, { method: "POST", body: JSON.stringify(data), headers: { "Content-Type": "application/json" } }).
-        then(res=> res.json());
+        then(res => res.json());
 }
 
-export function dbRemoveTrack (track: Track, playlistID: number){
+export function dbRemoveTrack(track: Track, playlistID: number) {
     const url = baseURL + "/removeTrack";
     const data = {
         track,
@@ -43,5 +47,5 @@ export function dbRemoveTrack (track: Track, playlistID: number){
     }
 
     return fetch(url, { method: "POST", body: JSON.stringify(data), headers: { "Content-Type": "application/json" } }).
-        then(res=> res.json());
+        then(res => res.json());
 }

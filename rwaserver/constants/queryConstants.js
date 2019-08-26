@@ -61,8 +61,9 @@ function CHECK_USERNAME(Username) {
 
 const GET_PLAYLISTS = 'Select * from reduxedPlaylist where ownerID = ';
 function ADD_PLAYLIST(name, ownerID) {
-    return `Insert into reduxedPlaylist (name, ownerID) values ('${name}', ${ownerID})`;
+    return `Insert into reduxedPlaylist (name, ownerID) values ('${name}', ${ownerID}); select * from reduxedPlaylist where name = '${name}' and ownerID = ${ownerID}`;
 }
+const DELETE_PLAYLIST = `delete from reduxedPlaylist where ID = `;
 
 module.exports = {
     ADD_DRIVER: ADD_DRIVER,
@@ -82,6 +83,7 @@ module.exports = {
     GET_USER_BY_ID: GET_USER_BY_ID,
     CHECK_USERNAME: CHECK_USERNAME,
     GET_PLAYLISTS: GET_PLAYLISTS,
-    ADD_PLAYLIST: ADD_PLAYLIST
+    ADD_PLAYLIST: ADD_PLAYLIST,
+    DELETE_PLAYLIST: DELETE_PLAYLIST
 
 }

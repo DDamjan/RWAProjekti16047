@@ -1,23 +1,22 @@
 /* eslint-disable no-unused-expressions */
 
-import { User } from "../models/user";
 import React, { Component } from "react";
 import { Link, Redirect } from 'react-router-dom';
-import { CardDeck, Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import PlaylistComponent from "./PlaylistComponent";
 import { Dispatch, Action } from "redux";
 import { AppState } from "../store/store";
 import { connect } from "react-redux";
 import Cookies from "universal-cookie";
 import { getUserByID } from "../store/actions/userActions";
-import '../style/home.css'
-import { Playlist } from "../models/playlist";
+import '../style/home.css';
 import { addPlaylist } from "../store/actions/playlistActions";
+import { Grid } from "@material-ui/core";
 
 interface Props {
     currentUser: any;
     fetchUser: (ID: number) => void;
-    addPlaylist: (playlist: Playlist) => void;
+    addPlaylist: (payload: any) => void;
 }
 
 interface State {
@@ -50,10 +49,10 @@ class HomeComponent extends Component<Props, any>{
         return (
             <div className="container">
                 <div className="title">
-                    {this.renderRedirect}
+                    {this.renderRedirect()}
                     <Link to="/" style={{ textDecoration: 'none', color: 'white' }}><h1>Reduxed player</h1></Link>
                     {this.renderName()}
-                    <p style={{ cursor: 'pointer', color: 'white' }} onClick={this.logout.bind(this)}><Link to="/login">Log out</Link></p>
+                    <p onClick={this.logout.bind(this)}><Link to="/login" style={{ cursor: 'pointer', color: 'white' }}>Log out</Link></p>
                 </div>
                 <div className="addPlaylist">
                     <div className="playlist-container">
@@ -81,9 +80,14 @@ class HomeComponent extends Component<Props, any>{
                     </div>
                 </div>
                 <div className="PlaylistGrid">
-                    <CardDeck>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="center"
+                    >
                         {this.renderCards()}
-                    </CardDeck>
+                    </Grid>
 
                 </div>
             </div>
@@ -95,9 +99,9 @@ class HomeComponent extends Component<Props, any>{
     }
 
     renderCards() {
-        if (this.props.currentUser.user !== undefined && this.props.currentUser.user.playlists) {
+        if (this.props.currentUser.user !== undefined && this.props.currentUser.user.playlists) {         
             return this.props.currentUser.user.playlists.map(playlist => {
-                return (<PlaylistComponent playList={playlist} />)
+                return (<PlaylistComponent playList={playlist} key={playlist.ID} />)
             })
         }
         return null;
@@ -115,16 +119,12 @@ class HomeComponent extends Component<Props, any>{
 
     handleSubmit(event: any) {
         event.preventDefault();
-        const playlist: Playlist = {
+        const payload = {
             name: this.state.playlistName,
-            ownerID: this.props.currentUser.user.ID,
-            trackURLs: [],
-            tracks: [],
-            ID: this.props.currentUser.user.playlists[this.props.currentUser.user.playlists.length - 1].ID + 1
+            ownerID: this.props.currentUser.user.ID
         }
-        this.props.currentUser.user.playlists.push(playlist);
 
-        this.props.addPlaylist(playlist);
+        this.props.addPlaylist(payload);
         this.forceUpdate();
     }
 
@@ -137,7 +137,7 @@ class HomeComponent extends Component<Props, any>{
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
     return {
         fetchUser: (ID: number) => dispatch(getUserByID(ID)),
-        addPlaylist: (playlist: Playlist) => dispatch(addPlaylist(playlist))
+        addPlaylist: (payload: any) => dispatch(addPlaylist(payload))
     }
 }
 function mapStateToProps(state: AppState) {

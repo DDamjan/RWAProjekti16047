@@ -5,6 +5,7 @@ import Cookies from 'universal-cookie';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
 import RegisterComponent from './components/RegisterComponent';
+import PlaylistDetailsComponent from './components/PlaylistDetailsComponent';
 
 const App: React.FC = () => {
 
@@ -14,6 +15,7 @@ const App: React.FC = () => {
     return cookie != null;
   }
   return (
+    <div>
     <Router>
       <Route exact path="/" render={() => (
         loggedIn() ? (
@@ -25,7 +27,9 @@ const App: React.FC = () => {
       </Route>
       <Route path="/login" component={LoginComponent}></Route>
       <Route path="/register" component={RegisterComponent}></Route>
+      <Route path="/playlist/:id" component={PlaylistDetailsComponent}></Route>
     </Router>
+    </div>
   );
 }
 
