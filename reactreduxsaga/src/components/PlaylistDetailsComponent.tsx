@@ -10,12 +10,17 @@ import { Track } from "../models/Track";
 import Cookies from "universal-cookie";
 import { searchTracks } from "../service/deezerService";
 import TrackDetailsComponent from "./TrackDetailsComponent";
+import { connect } from "react-redux";
+import { Dispatch, Action } from "redux";
+import { addTrack, currentPlaylist } from "../store/actions/playlistActions";
+import { AppState } from "../store/store";
+import '../style/home.css';
 
 interface Props {
     currentPlaylist: Playlist;
     match: any;
     fetchPlaylist: (ID: number) => void;
-    addTrack: (track: Track) => void;
+    addTrack: (track: Track, playlistID: number) => void;
 }
 
 interface State {
@@ -39,7 +44,7 @@ class PlaylistDetailsComponent extends Component<Props, any>{
         this.props.fetchPlaylist(id);
 
     }
-    
+
     renderRedirect() {
         if (this.state.redirect) {
             return <Redirect to='/' />
@@ -114,8 +119,8 @@ class PlaylistDetailsComponent extends Component<Props, any>{
         return this.state.trackName.length > 0;
     }
 
-    renderCards(){
-        if ( this.props.currentPlaylist.tracks) {         
+    renderCards() {
+        if (this.props.currentPlaylist != undefined) {
             return this.props.currentPlaylist.tracks.map(track => {
                 return (<TrackDetailsComponent track={track} key={track.ID} />)
             })
@@ -128,4 +133,16 @@ class PlaylistDetailsComponent extends Component<Props, any>{
     }
 }
 
-export default PlaylistDetailsComponent;
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+    return {
+        fetchPlaylist: (ID: number) => dispatch(currentPlaylist(ID)),
+        addTrack: (payload: Track, playlistID: number) => dispatch(addTrack(payload, playlistID))
+    }
+}
+function mapStateToProps(state: AppState) {
+    return {
+        currentPlaylist: state.currentPlaylist
+    }
+}
+
+export default connect (mapStateToProps, mapDispatchToProps) (PlaylistDetailsComponent);
