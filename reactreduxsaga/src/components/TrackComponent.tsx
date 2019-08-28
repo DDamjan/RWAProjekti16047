@@ -17,15 +17,15 @@ class TrackComponent extends Component<Props, State>{
         return (
             <Card>
                 <Card.Body>
-                    <Card.Img variant="top" src={this.props.track.albumCover} />
+                    <Card.Img variant="top" src={this.props.track.AlbumCover} />
                     <Card.Title>
-                        {this.props.track.trackTitle} - {this.props.track.trackArtist}
+                        {this.props.track.Title} - {this.props.track.Artist}
                         <Link to={"/track/" + this.props.track.ID}><i className="fas fa-play-circle"></i></Link>
                         <a onClick={this.deleteTrack}><i className="fas fa-trash-alt"></i></a>
                     </Card.Title>
                     <Card.Text>
-                        {this.props.track.albumName}
-                        Duration: {this.props.track.trackDuration}
+                        {this.props.track.Album}
+                        Duration: {this.props.track.Duration}
                     </Card.Text>
                 </Card.Body>
             </Card>

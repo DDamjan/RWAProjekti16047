@@ -12,6 +12,7 @@ import { getUserByID } from "../store/actions/userActions";
 import '../style/home.css';
 import { addPlaylist } from "../store/actions/playlistActions";
 import { Grid } from "@material-ui/core";
+import NavComponent from "./NavComponent";
 
 interface Props {
     currentUser: any;
@@ -32,28 +33,25 @@ class HomeComponent extends Component<Props, any>{
             redirect: false
         }
     }
-    componentDidMount = () => {
 
+    componentDidMount() {
         const cookies = new Cookies();
         let id = cookies.get('logedIn');
 
         this.props.fetchUser(id);
 
     }
+
     renderRedirect() {
         if (this.state.redirect) {
             return <Redirect to='/' />
         }
     }
+
     render() {
         return (
             <div className="container">
-                <div className="title">
-                    {this.renderRedirect()}
-                    <Link to="/" style={{ textDecoration: 'none', color: 'white' }}><h1>Reduxed player</h1></Link>
-                    {this.renderName()}
-                    <p onClick={this.logout.bind(this)}><Link to="/login" style={{ cursor: 'pointer', color: 'white' }}>Log out</Link></p>
-                </div>
+                <NavComponent></NavComponent>
                 <div className="addPlaylist">
                     <div className="playlist-container">
                         <h3>Playlists</h3>
@@ -99,7 +97,7 @@ class HomeComponent extends Component<Props, any>{
     }
 
     renderCards() {
-        if (this.props.currentUser.user !== undefined && this.props.currentUser.user.playlists) {         
+        if (this.props.currentUser.user !== undefined && this.props.currentUser.user.playlists) {
             return this.props.currentUser.user.playlists.map(playlist => {
                 return (<PlaylistComponent playList={playlist} key={playlist.ID} />)
             })
@@ -140,6 +138,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
         addPlaylist: (payload: any) => dispatch(addPlaylist(payload))
     }
 }
+
 function mapStateToProps(state: AppState) {
     return {
         currentUser: state.user

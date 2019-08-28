@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import Cookies from "universal-cookie";
 import { AppState } from "../store/store";
 import "../style/login.css"
-import { authUser, authUserSuccess } from "../store/actions/userActions";
+import { authUserSuccess } from "../store/actions/userActions";
 import { Dispatch, Action } from "redux";
 import { dbAuthUser } from "../service/userService";
 
@@ -44,17 +44,17 @@ class LoginComponent extends Component<Props, any> {
 
     handleSubmit = (event: any) => {
         event.preventDefault();
-        dbAuthUser(this.state.username, this.state.password).then(user=>{
+        dbAuthUser(this.state.username, this.state.password).then(user => {
             if (user.length === 0) {
                 this.setState({
                     password: "",
                     error: "Invalid username or password."
                 })
-            }else{
+            } else {
                 this.props.authUser(user);
                 const cookies = new Cookies();
                 cookies.set('logedIn', user[0].ID, { path: '/' });
-        
+
                 this.setState({
                     redirect: true
                 });
@@ -87,6 +87,7 @@ class LoginComponent extends Component<Props, any> {
                     {this.renderRedirect()}
                     <span>Reduxed Player</span>
                     <Form onSubmit={this.handleSubmit}>
+                        {this.renderErrorMessage()}
                         <Form.Group controlId="username"  >
                             <Form.Control
                                 placeholder="username"
@@ -103,7 +104,6 @@ class LoginComponent extends Component<Props, any> {
                                 onChange={this.handleChange}
                                 type="password"
                             />
-                            {this.renderErrorMessage()}
                         </Form.Group>
                         <Button
                             block

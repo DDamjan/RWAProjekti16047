@@ -1,9 +1,11 @@
 import { RegisterUser, registerUserSuccess, AuthUser, authUserSuccess, GetUserByID, getUserByIDSuccess, registerUserFail } from "./actions/userActions";
 import { dbAuthUser, dbRegisterUser, dbGetUserByID, dbCheckUsername } from "../service/userService";
-import { dbGetPlaylists, dbAddPlaylist, dbDeletePlaylist, dbAddTrack, dbRemoveTrack } from "../service/playlistService";
+import { dbGetPlaylists, dbAddPlaylist, dbDeletePlaylist, dbAddTrack, dbRemoveTrack, dbFetchCurrentPlaylist } from "../service/playlistService";
 import { put } from "redux-saga/effects";
-import { GetPlaylists, getPlaylistsSuccess, AddPlaylist, addPlaylistSuccess, DeletePlaylist, deletePlaylistSuccess, AddTrack, addTrackSuccess, RemoveTrack, RemoveTrackSuccess } from "./actions/playlistActions";
+import { GetPlaylists, getPlaylistsSuccess, AddPlaylist, addPlaylistSuccess, DeletePlaylist, deletePlaylistSuccess, AddTrack, addTrackSuccess, RemoveTrack, RemoveTrackSuccess, CurrentPlaylist, currentPlaylistSuccess, FindTrack, findTrackSuccess } from "./actions/playlistActions";
 import Cookies from "universal-cookie";
+import { searchTracks } from '../service/deezerService';
+import { Track } from "../models/Track";
 
 //users
 export function* sAuthUser(user: AuthUser) {
@@ -48,21 +50,44 @@ export function* sFetchPlaylists(playlist: GetPlaylists) {
 
 export function* sAddPlaylists(playlist: AddPlaylist) {
     const dbPlaylist = yield dbAddPlaylist(playlist);
-    console.log(dbPlaylist);
     yield put(addPlaylistSuccess(dbPlaylist[0]));
 }
 
 export function* sDeletePlaylist(playlist: DeletePlaylist) {
     const deletedPlaylistID = yield dbDeletePlaylist(playlist.ID);
-    yield put(deletePlaylistSuccess(deletedPlaylistID.id));
+    yield put(deletePlaylistSuccess(deletedPlaylistID.ID));
 }
 
 export function* sAddTrack(track: AddTrack) {
     const dbTrack = yield dbAddTrack(track.track, track.playlistID);
-    yield put(addTrackSuccess(dbTrack));
+    yield put(addTrackSuccess(dbTrack.track));
+}
+
+export function* sFindTrack(query: FindTrack) {
+    const dzTrack = yield searchTracks(query.query);
+    //console.log(dzTrack.data[0]);
+
+    const track: Track = {
+        ID: dzTrack.data[0].id,
+        Artist: dzTrack.data[0].artist.name,
+        Duration: dzTrack.data[0].duration,
+        Title: dzTrack.data[0].title,
+        AlbumCover: dzTrack.data[0].album.cover_big,
+        Album: dzTrack.data[0].album.title,
+        URL: dzTrack.data[0].preview
+    }
+
+    console.log(track);
+
+    yield put(findTrackSuccess(track, query.playlistID));
 }
 
 export function* sRemoveTrack(track: RemoveTrack) {
     const dbTrack = yield dbRemoveTrack(track.track, track.playlistID);
     yield put(RemoveTrackSuccess(dbTrack));
+}
+
+export function* sCurrentPlaylist(ID: CurrentPlaylist) {
+    const dbCurrentPlaylist = yield dbFetchCurrentPlaylist(ID.ID);
+    yield put(currentPlaylistSuccess(dbCurrentPlaylist));
 }

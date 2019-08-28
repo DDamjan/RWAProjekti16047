@@ -44,21 +44,6 @@ async function execPost(req, res, query) {
   }
 }
 
-async function execRegister(req, res, query) {
-  try {
-    const pool = await poolPromise;
-    let result = await pool.request()
-      .input('input_parameter', sql.Int, req.query.input_parameter)
-      .query(query);
-    res.json(result.recordset);
-    res.end();
-  } catch (err) {
-    res.status(500);
-    res.send(err.message);
-    res.end();
-  }
-}
-
 async function execFile(res, path) {
   try {
     res.sendFile(path);
@@ -94,10 +79,24 @@ async function execUser(req, res, ID) {
   res.json(data);
 }
 
+async function execPlaylists(req, res, ID){
+  let playlist = await returnArray(req, res, queryString.CURRENT_PLAYLIST + ID);
+  let tracks = await returnArray(req, res, queryString.TRACKS_PLAYLIST+ ID);
+
+  let data = {
+    ID: playlist[0].ID,
+    Name: playlist[0].Name,
+    OwnerID: playlist[0].OwnerID,
+    Tracks: tracks
+  }
+
+  res.json(data);
+}
+
 module.exports = {
   execGet: execGet,
   execPost: execPost,
   execFile: execFile,
   execUser: execUser,
-  execRegister: execRegister
+  execPlaylists:execPlaylists
 }

@@ -12,15 +12,16 @@ import { searchTracks } from "../service/deezerService";
 import TrackDetailsComponent from "./TrackDetailsComponent";
 import { connect } from "react-redux";
 import { Dispatch, Action } from "redux";
-import { addTrack, currentPlaylist } from "../store/actions/playlistActions";
+import { addTrack, currentPlaylist, findTrack } from "../store/actions/playlistActions";
 import { AppState } from "../store/store";
 import '../style/home.css';
+import NavComponent from "./NavComponent";
 
 interface Props {
     currentPlaylist: Playlist;
     match: any;
     fetchPlaylist: (ID: number) => void;
-    addTrack: (track: Track, playlistID: number) => void;
+    addTrack: (track: string, playlistID: number) => void;
 }
 
 interface State {
@@ -41,8 +42,9 @@ class PlaylistDetailsComponent extends Component<Props, any>{
 
     componentDidMount() {
         const { id } = this.props.match.params;
-        this.props.fetchPlaylist(id);
-
+        if (id !== undefined) {
+            this.props.fetchPlaylist(id);
+        }
     }
 
     renderRedirect() {
@@ -54,14 +56,10 @@ class PlaylistDetailsComponent extends Component<Props, any>{
     render() {
         return (
             <div className="container">
-                <div className="title">
-                    {this.renderRedirect()}
-                    <Link to="/" style={{ textDecoration: 'none', color: 'white' }}><h1>Reduxed player</h1></Link>
-                    <p onClick={this.logout.bind(this)}><Link to="/login" style={{ cursor: 'pointer', color: 'white' }}>Log out</Link></p>
-                </div>
+                <NavComponent></NavComponent>
                 <div className="addPlaylist">
                     <div className="playlist-container">
-                        <h3>Playlists</h3>
+                        {this.renderPlayListName()}
                     </div>
                     <div className="form-container">
                         <Form onSubmit={this.handleSubmit.bind(this)}>
@@ -79,7 +77,7 @@ class PlaylistDetailsComponent extends Component<Props, any>{
                                 disabled={!this.validateForm()}
                                 type="submit"
                             >
-                                Add playlist
+                                Add track
                             </Button>
                         </Form>
                     </div>
@@ -106,7 +104,7 @@ class PlaylistDetailsComponent extends Component<Props, any>{
 
     handleSubmit(event: any) {
         event.preventDefault();
-        searchTracks(this.state.trackName);
+        this.props.addTrack(this.state.trackName, this.props.currentPlaylist.ID);
     }
 
     handleChange = (event: any) => {
@@ -120,12 +118,20 @@ class PlaylistDetailsComponent extends Component<Props, any>{
     }
 
     renderCards() {
-        if (this.props.currentPlaylist != undefined) {
-            return this.props.currentPlaylist.tracks.map(track => {
+        if (this.props.currentPlaylist.Tracks != undefined) {
+            return this.props.currentPlaylist.Tracks.map(track => {
                 return (<TrackDetailsComponent track={track} key={track.ID} />)
             })
         }
         return null;
+    }
+
+    renderPlayListName() {
+        if (this.props.currentPlaylist !== undefined) {
+            return (<h3>{this.props.currentPlaylist.Name}</h3>);
+        }
+        
+
     }
 
     addSong() {
@@ -136,13 +142,13 @@ class PlaylistDetailsComponent extends Component<Props, any>{
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
     return {
         fetchPlaylist: (ID: number) => dispatch(currentPlaylist(ID)),
-        addTrack: (payload: Track, playlistID: number) => dispatch(addTrack(payload, playlistID))
+        addTrack: (payload: string, playlistID: number) => dispatch(findTrack(payload, playlistID))
     }
 }
 function mapStateToProps(state: AppState) {
     return {
-        currentPlaylist: state.currentPlaylist
+        currentPlaylist: state.playlists.currentPlaylist
     }
 }
 
-export default connect (mapStateToProps, mapDispatchToProps) (PlaylistDetailsComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDetailsComponent);

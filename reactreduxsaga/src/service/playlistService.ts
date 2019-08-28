@@ -28,11 +28,11 @@ export function dbDeletePlaylist(ID: number) {
         then(res => res.json());
 }
 
-export function dbAddTrack(track: Track, trackID: number) {
-    const url = baseURL + "/addTrack";
+export function dbAddTrack(track: Track, playlistID: number) {
+    const url = baseURL + "addtrack";
     const data = {
         track,
-        trackID
+        playlistID
     }
 
     return fetch(url, { method: "POST", body: JSON.stringify(data), headers: { "Content-Type": "application/json" } }).
@@ -40,12 +40,19 @@ export function dbAddTrack(track: Track, trackID: number) {
 }
 
 export function dbRemoveTrack(track: Track, playlistID: number) {
-    const url = baseURL + "/removeTrack";
+    const url = baseURL + "removeTrack";
     const data = {
         track,
         playlistID
     }
 
     return fetch(url, { method: "POST", body: JSON.stringify(data), headers: { "Content-Type": "application/json" } }).
+        then(res => res.json());
+}
+
+export function dbFetchCurrentPlaylist(ID: number) {
+    const url = baseURL + "details/?id=" + ID;
+
+    return fetch(url).
         then(res => res.json());
 }

@@ -8,7 +8,7 @@ router.post('/register', async (req, res) => {
   let username = req.body.username;
   let password = sha('sha256').update(req.body.password).digest('hex');
 
-  query.execRegister(req, res, queryString.REGISTER_USER(username, password));
+  query.execPost(req, res, queryString.REGISTER_USER(username, password));
 });
 
 router.post('/auth', async (req, res) => {

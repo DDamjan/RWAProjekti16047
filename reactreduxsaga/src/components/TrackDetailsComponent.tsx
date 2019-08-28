@@ -13,11 +13,11 @@ class TrackDetailsComponent extends Component<Props, State>{
     render() {
         return (
             <div className="container">
-                <img src={this.props.track.albumCover}></img>
+                <img src={this.props.track.AlbumCover}></img>
                 <div className="trackDetails">
-                    <h1>{this.props.track.trackTitle}</h1>
-                    <h2>{this.props.track.trackArtist}</h2>
-                    <h3>{this.props.track.albumName}</h3>
+                    <h1>{this.props.track.Title}</h1>
+                    <h2>{this.props.track.Artist}</h2>
+                    <h3>{this.props.track.Album}</h3>
                 </div>
             </div>
         )

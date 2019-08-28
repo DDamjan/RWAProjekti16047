@@ -59,11 +59,17 @@ function CHECK_USERNAME(Username) {
 
 /* Playlists */
 
-const GET_PLAYLISTS = 'Select * from reduxedPlaylist where ownerID = ';
-function ADD_PLAYLIST(name, ownerID) {
-    return `Insert into reduxedPlaylist (name, ownerID) values ('${name}', ${ownerID}); select * from reduxedPlaylist where name = '${name}' and ownerID = ${ownerID}`;
-}
+const GET_PLAYLISTS = 'Select * from reduxedPlaylist where OwnerID = ';
 const DELETE_PLAYLIST = `delete from reduxedPlaylist where ID = `;
+const CURRENT_PLAYLIST =  `Select * from reduxedPlaylist where ID = `;
+const TRACKS_PLAYLIST = 'select * from reduxedSongs where PlaylistID = ';
+function ADD_PLAYLIST(name, ownerID) {
+    return `Insert into reduxedPlaylist (Name, OwnerID) values ('${name}', ${ownerID}); select * from reduxedPlaylist where Name = '${name}' and OwnerID = ${ownerID}`;
+}
+function ADD_TRACK (track, playlistID){
+    return `Insert into reduxedSongs (playlistID, URL, Title, Artist, Album, Duration, AlbumCoverLink) values (${playlistID}, '${track.URL}', '${track.Title}', '${track.Artist}', '${track.Album}', ${track.Duration}, '${track.AlbumCover}')`
+}
+
 
 module.exports = {
     ADD_DRIVER: ADD_DRIVER,
@@ -84,6 +90,8 @@ module.exports = {
     CHECK_USERNAME: CHECK_USERNAME,
     GET_PLAYLISTS: GET_PLAYLISTS,
     ADD_PLAYLIST: ADD_PLAYLIST,
-    DELETE_PLAYLIST: DELETE_PLAYLIST
-
+    DELETE_PLAYLIST: DELETE_PLAYLIST,
+    CURRENT_PLAYLIST: CURRENT_PLAYLIST,
+    TRACKS_PLAYLIST: TRACKS_PLAYLIST,
+    ADD_TRACK: ADD_TRACK
 }

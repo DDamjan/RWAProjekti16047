@@ -28,7 +28,7 @@ class PlaylistComponent extends Component<Props, State>{
             <Card>
                 <CardContent>
                     <Typography variant="body2" component="p">
-                        {this.props.playList.name}
+                        {this.props.playList.Name}
                         <br />
                     </Typography>
                 </CardContent>

@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { FETCH_PLAYLISTS, FETCH_PLAYLISTS_SUCCESS, ADD_PLAYLIST, ADD_PLAYLIST_SUCCESS, DELETE_PLAYLIST, DELETE_PLAYLIST_SUCCESS, CURRENT_PLAYLIST, CURRENT_TRACK, ADD_TRACK, ADD_TRACK_SUCCESS, FIND_TRACK, REMOVE_TRACK } from "./types";
+import { FETCH_PLAYLISTS, FETCH_PLAYLISTS_SUCCESS, ADD_PLAYLIST, ADD_PLAYLIST_SUCCESS, DELETE_PLAYLIST, DELETE_PLAYLIST_SUCCESS, CURRENT_PLAYLIST, CURRENT_TRACK, ADD_TRACK, ADD_TRACK_SUCCESS, FIND_TRACK, REMOVE_TRACK, CURRENT_PLAYLIST_SUCCESS, FIND_TRACK_SUCCESS } from "./types";
 import { Playlist } from "../../models/playlist";
 import { Track } from "../../models/Track";
 
@@ -80,6 +80,17 @@ export function currentPlaylist(ID: number): CurrentPlaylist{
     };
 }
 
+export interface CurrentPlaylistSuccess extends Action{
+    currentPlaylist: Playlist;
+}
+
+export function currentPlaylistSuccess(currentPlaylist: Playlist): CurrentPlaylistSuccess{
+    return {
+        type: CURRENT_PLAYLIST_SUCCESS,
+        currentPlaylist
+    };
+}
+
 export interface CurrentTrack extends Action{
     ID: number;
 }
@@ -117,12 +128,27 @@ export function addTrackSuccess(track: Track): AddTrackSuccess{
 
 export interface FindTrack extends Action{
     query: string;
+    playlistID: number;
 }
 
-export function findTrack(query: string): FindTrack{
+export function findTrack(query: string, playlistID: number): FindTrack{
     return{
         type: FIND_TRACK,
-        query
+        query,
+        playlistID
+    };
+}
+
+export interface FindTrackSuccess extends Action{
+    track: Track;
+    playlistID: number;
+}
+
+export function findTrackSuccess(track: Track, playlistID: number): FindTrackSuccess{
+    return{
+        type: FIND_TRACK_SUCCESS,
+        track,
+        playlistID
     };
 }
 

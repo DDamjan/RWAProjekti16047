@@ -6,6 +6,8 @@ import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
 import RegisterComponent from './components/RegisterComponent';
 import PlaylistDetailsComponent from './components/PlaylistDetailsComponent';
+import NavComponent from './components/NavComponent';
+import { Container } from 'react-bootstrap';
 
 const App: React.FC = () => {
 
@@ -15,11 +17,11 @@ const App: React.FC = () => {
     return cookie != null;
   }
   return (
-    <div>
     <Router>
       <Route exact path="/" render={() => (
         loggedIn() ? (
-          <HomeComponent/>
+              <HomeComponent />
+
         ) : (
             <Redirect to="/login" />
           )
@@ -29,7 +31,6 @@ const App: React.FC = () => {
       <Route path="/register" component={RegisterComponent}></Route>
       <Route path="/playlist/:id" component={PlaylistDetailsComponent}></Route>
     </Router>
-    </div>
   );
 }
 

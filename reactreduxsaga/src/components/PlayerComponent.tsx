@@ -35,18 +35,18 @@ class PlayerComponent extends Component<Props, State>{
                     <Link to="/logout">Log out</Link>
                 </div>
                 <div className="Playlist-bar">
-                    <h3>{this.props.playlist.name}</h3>
+                    <h3>{this.props.playlist.Name}</h3>
                 </div>
                 <div className="Player-container">
                     <div className="player">
-                        <TrackDetailsComponent track={this.props.playlist.tracks[0]} />
+                        <TrackDetailsComponent track={this.props.playlist.Tracks[0]} />
                     </div>
                     <div className="queue">
                         <ol>
                             {
                                 () => {
-                                    this.props.playlist.tracks.map(track => {
-                                        return (<li>{track.trackTitle} - {track.albumName}</li>);
+                                    this.props.playlist.Tracks.map(track => {
+                                        return (<li>{track.Title} - {track.Album}</li>);
                                     })
                                 }
                             }
@@ -54,7 +54,7 @@ class PlayerComponent extends Component<Props, State>{
                     </div>
                 </div>
                 <ReactMediaVisualizer
-                    playlist={this.props.playlist.trackURLs}
+                    playlist={this.props.playlist}
                     receiveStateUpdates={this.receiveStateUpdates}
                     playlistIsPlaying={this.state.playlistPlaying}
                     theme={'spotify'}
