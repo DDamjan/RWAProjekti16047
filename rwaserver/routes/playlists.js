@@ -20,7 +20,9 @@ router.get('/', async (req, res) => {
 router.post('/delete', async (req, res)=> {
   let id = req.body.ID;
 
-  query.execPost(req, res, queryString.DELETE_PLAYLIST+id);
+  console.log(id);
+
+  query.execPost(req, res, queryString.DELETE_PLAYLIST(id));
 });
 
 router.get('/details/', async (req, res)=>{
@@ -35,5 +37,12 @@ router.post('/addtrack', async (req, res)=>{
 
   query.execPost(req, res, queryString.ADD_TRACK(track, playlistID));
 });
+
+router.post('/removetrack', async(req, res)=>{
+  let id = req.body.ID;
+  console.log(id.ID);
+
+  query.execPost(req, res, queryString.REMOVE_TRACK+id);
+})
 
 module.exports = router;

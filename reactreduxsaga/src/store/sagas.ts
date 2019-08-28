@@ -55,20 +55,20 @@ export function* sAddPlaylists(playlist: AddPlaylist) {
 
 export function* sDeletePlaylist(playlist: DeletePlaylist) {
     const deletedPlaylistID = yield dbDeletePlaylist(playlist.ID);
+    console.log(deletedPlaylistID);
     yield put(deletePlaylistSuccess(deletedPlaylistID.ID));
 }
 
 export function* sAddTrack(track: AddTrack) {
     const dbTrack = yield dbAddTrack(track.track, track.playlistID);
-    yield put(addTrackSuccess(dbTrack.track));
+    yield put(addTrackSuccess(dbTrack[0]));
 }
 
 export function* sFindTrack(query: FindTrack) {
     const dzTrack = yield searchTracks(query.query);
-    //console.log(dzTrack.data[0]);
 
-    const track: Track = {
-        ID: dzTrack.data[0].id,
+    const track = {
+        DeezerID: dzTrack.data[0].id,
         Artist: dzTrack.data[0].artist.name,
         Duration: dzTrack.data[0].duration,
         Title: dzTrack.data[0].title,
@@ -77,13 +77,11 @@ export function* sFindTrack(query: FindTrack) {
         URL: dzTrack.data[0].preview
     }
 
-    console.log(track);
-
     yield put(findTrackSuccess(track, query.playlistID));
 }
 
 export function* sRemoveTrack(track: RemoveTrack) {
-    const dbTrack = yield dbRemoveTrack(track.track, track.playlistID);
+    const dbTrack = yield dbRemoveTrack(track.ID);
     yield put(RemoveTrackSuccess(dbTrack));
 }
 

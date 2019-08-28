@@ -7,6 +7,7 @@ import { AppState } from "../store/store";
 import "../style/register.css"
 import { registerUser } from "../store/actions/userActions";
 import { Dispatch, Action } from "redux";
+import Cookies from "universal-cookie";
 
 
 interface Props {
@@ -48,7 +49,7 @@ class RegisterComponent extends Component<Props, any> {
         event.preventDefault();
         this.props.registerUser(this.state.username, this.state.password, this.state.passwordConfirm);
         debugger;
-        if (this.props.error === "") {
+        if (this.loggedIn()) {
             this.setState({
                 redirect: true
             });
@@ -56,6 +57,11 @@ class RegisterComponent extends Component<Props, any> {
         }
     }
 
+    loggedIn(){
+        const cookies = new Cookies();
+        let cookie = cookies.get('logedIn');
+        return cookie != null;
+    }
 
     renderRedirect() {
         if (this.state.redirect) {

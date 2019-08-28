@@ -1,4 +1,3 @@
-import { Playlist } from '../models/playlist';
 import { Track } from '../models/Track';
 
 const baseURL = 'http://localhost:8080/playlists/';
@@ -23,6 +22,7 @@ export function dbDeletePlaylist(ID: number) {
     const payload = {
         ID
     }
+    console.log(payload);
 
     return fetch(url, { method: "POST", body: JSON.stringify(payload), headers: { "Content-Type": "application/json" } }).
         then(res => res.json());
@@ -39,11 +39,10 @@ export function dbAddTrack(track: Track, playlistID: number) {
         then(res => res.json());
 }
 
-export function dbRemoveTrack(track: Track, playlistID: number) {
-    const url = baseURL + "removeTrack";
+export function dbRemoveTrack(ID: number) {
+    const url = baseURL + "removetrack";
     const data = {
-        track,
-        playlistID
+        ID
     }
 
     return fetch(url, { method: "POST", body: JSON.stringify(data), headers: { "Content-Type": "application/json" } }).

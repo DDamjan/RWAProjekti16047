@@ -25,20 +25,22 @@ class PlaylistComponent extends Component<Props, State>{
 
     render() {
         return (
-            <Card>
-                <CardContent>
-                    <Typography variant="body2" component="p">
-                        {this.props.playList.Name}
-                        <br />
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Link to={"/playlist/" + this.props.playList.ID} >
-                        <Button variant="light">Open</Button>
-                    </Link>
-                    <Button variant="light" onClick={this.handleDelete.bind(this)}>Delete</Button>
-                </CardActions>
-            </Card>
+            <div className="card-outline">
+                <Card>  
+                    <CardContent>
+                        <Typography variant="body2" component="p">
+                            {this.props.playList.Name}
+                            <br />
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Link to={"/playlist/" + this.props.playList.ID} >
+                            <Button variant="light">Open</Button>
+                        </Link>
+                        <Button variant="light" onClick={this.handleDelete.bind(this)}>Delete</Button>
+                    </CardActions>
+                </Card>
+            </div>
         );
     }
 

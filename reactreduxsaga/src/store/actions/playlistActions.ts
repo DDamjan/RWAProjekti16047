@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { FETCH_PLAYLISTS, FETCH_PLAYLISTS_SUCCESS, ADD_PLAYLIST, ADD_PLAYLIST_SUCCESS, DELETE_PLAYLIST, DELETE_PLAYLIST_SUCCESS, CURRENT_PLAYLIST, CURRENT_TRACK, ADD_TRACK, ADD_TRACK_SUCCESS, FIND_TRACK, REMOVE_TRACK, CURRENT_PLAYLIST_SUCCESS, FIND_TRACK_SUCCESS } from "./types";
+import { FETCH_PLAYLISTS, FETCH_PLAYLISTS_SUCCESS, ADD_PLAYLIST, ADD_PLAYLIST_SUCCESS, DELETE_PLAYLIST, DELETE_PLAYLIST_SUCCESS, CURRENT_PLAYLIST, CURRENT_TRACK, ADD_TRACK, ADD_TRACK_SUCCESS, FIND_TRACK, REMOVE_TRACK, CURRENT_PLAYLIST_SUCCESS, FIND_TRACK_SUCCESS, REMOVE_TRACK_SUCCESS } from "./types";
 import { Playlist } from "../../models/playlist";
 import { Track } from "../../models/Track";
 
@@ -144,7 +144,7 @@ export interface FindTrackSuccess extends Action{
     playlistID: number;
 }
 
-export function findTrackSuccess(track: Track, playlistID: number): FindTrackSuccess{
+export function findTrackSuccess(track: any, playlistID: number): FindTrackSuccess{
     return{
         type: FIND_TRACK_SUCCESS,
         track,
@@ -153,25 +153,23 @@ export function findTrackSuccess(track: Track, playlistID: number): FindTrackSuc
 }
 
 export interface RemoveTrack extends Action{
-    track: Track;
-    playlistID: number;
+    ID: number;
 }
 
-export function removeTrack(track: Track, playlistID): RemoveTrack{
+export function removeTrack(ID: number): RemoveTrack{
     return {
         type: REMOVE_TRACK,
-        track,
-        playlistID
+        ID
     }
 }
 
 export interface RemoveTrackSuccess extends Action{
-    track: Track;
+    ID: number;
 }
 
-export function RemoveTrackSuccess(track: Track): RemoveTrackSuccess{
+export function RemoveTrackSuccess(ID: number): RemoveTrackSuccess{
     return {
-        type: REMOVE_TRACK,
-        track
+        type: REMOVE_TRACK_SUCCESS,
+        ID
     }
 }

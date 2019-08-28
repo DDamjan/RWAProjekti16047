@@ -60,15 +60,20 @@ function CHECK_USERNAME(Username) {
 /* Playlists */
 
 const GET_PLAYLISTS = 'Select * from reduxedPlaylist where OwnerID = ';
-const DELETE_PLAYLIST = `delete from reduxedPlaylist where ID = `;
-const CURRENT_PLAYLIST =  `Select * from reduxedPlaylist where ID = `;
-const TRACKS_PLAYLIST = 'select * from reduxedSongs where PlaylistID = ';
+const CURRENT_PLAYLIST = `Select * from reduxedPlaylist where ID = `;
+const TRACKS_PLAYLIST = 'select ID, DeezerID, URL, Title, Artist, Album, Duration, AlbumCover from reduxedSongs where PlaylistID = ';
+const REMOVE_TRACK = 'delete from reduxedSongs where ID = ';
 function ADD_PLAYLIST(name, ownerID) {
     return `Insert into reduxedPlaylist (Name, OwnerID) values ('${name}', ${ownerID}); select * from reduxedPlaylist where Name = '${name}' and OwnerID = ${ownerID}`;
 }
-function ADD_TRACK (track, playlistID){
-    return `Insert into reduxedSongs (playlistID, URL, Title, Artist, Album, Duration, AlbumCoverLink) values (${playlistID}, '${track.URL}', '${track.Title}', '${track.Artist}', '${track.Album}', ${track.Duration}, '${track.AlbumCover}')`
+function ADD_TRACK(track, playlistID) {
+    return `Insert into reduxedSongs (DeezerID, PlaylistID, URL, Title, Artist, Album, Duration, AlbumCover) values (${track.DeezerID}, ${playlistID}, '${track.URL}', '${track.Title}', '${track.Artist}', '${track.Album}', ${track.Duration}, '${track.AlbumCover}');
+            Select ID, DeezerID, URL, Title, Artist, Album, Duration, AlbumCover from reduxedSongs where DeezerID = ${track.DeezerID} and playlistID = ${playlistID};`
 }
+function DELETE_PLAYLIST(ID) {
+    return `delete from reduxedSongs where playlistID = ${ID} ; delete from reduxedPlaylist where ID = ${ID} ;`;
+}
+
 
 
 module.exports = {
@@ -93,5 +98,6 @@ module.exports = {
     DELETE_PLAYLIST: DELETE_PLAYLIST,
     CURRENT_PLAYLIST: CURRENT_PLAYLIST,
     TRACKS_PLAYLIST: TRACKS_PLAYLIST,
-    ADD_TRACK: ADD_TRACK
+    ADD_TRACK: ADD_TRACK,
+    REMOVE_TRACK: REMOVE_TRACK
 }
